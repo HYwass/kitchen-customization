@@ -1,0 +1,182 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_APPLIANCES",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "cutout_order": ["width_x", "depth_y"],
+  "model_policy": {
+    "model_format": "glb",
+    "model_scale": 1.0,
+    "origin": "bottom_center_of_installation_body",
+    "front_axis": "positive_y",
+    "up_axis": "positive_z",
+    "fixed_dimensions": true,
+    "compatibility_rule_v1": "appliance.interface_id must equal cabinet slot interface_id and installation body must fit within slot limits"
+  },
+  "appliances": [
+    {
+      "id": "APPL_OVEN_600_BLACK",
+      "category": "oven",
+      "interface_id": "OVEN_600",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.56, 0.55, 0.59],
+      "visible_front_size": [0.595, 0.025, 0.595],
+      "required_niche": {"min": [0.56, 0.55, 0.59], "max": [0.568, 0.57, 0.605]},
+      "ventilation_clearance": {"rear": 0.02, "top": 0.005},
+      "asset_path": "assets/appliances/APPL_OVEN_600_BLACK.glb",
+      "astra_prompt": "A modern European built-in electric oven, black glass and dark stainless steel, 595 mm wide and 595 mm high visible front, 560 mm wide 590 mm high 550 mm deep installation body, one centered handle, minimal control panel, isolated appliance, exact real-world proportions, origin at bottom center of installation body, Z axis up, front faces positive Y, no surrounding cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_DISHWASHER_600_INTEGRATED",
+      "category": "dishwasher",
+      "interface_id": "DISHWASHER_600",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.598, 0.55, 0.815],
+      "visible_front_size": [0.596, 0.02, 0.715],
+      "required_bay": {"min": [0.6, 0.56, 0.82], "max": [0.61, 0.62, 0.88]},
+      "front_behavior": "accepts_matching_kitchen_front_panel",
+      "asset_path": "assets/appliances/APPL_DISHWASHER_600_INTEGRATED.glb",
+      "astra_prompt": "A fully integrated European dishwasher, 598 mm wide, 815 mm high, 550 mm deep metal body, hidden controls on the top edge, plain removable front mounting plate without decorative cabinet panel, isolated appliance, exact real-world proportions, origin at bottom center, Z axis up, front faces positive Y, no surrounding cabinets, no text or logos."
+    },
+    {
+      "id": "APPL_FRIDGE_INTEGRATED_1220",
+      "category": "fridge",
+      "interface_id": "FRIDGE_INTEGRATED_1220",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.54, 0.545, 1.215],
+      "required_niche": {"min": [0.56, 0.55, 1.22], "max": [0.568, 0.57, 1.235]},
+      "front_behavior": "accepts_matching_kitchen_front_panel",
+      "ventilation_clearance": {"bottom": 0.02, "top": 0.02, "rear": 0.02},
+      "asset_path": "assets/appliances/APPL_FRIDGE_INTEGRATED_1220.glb",
+      "astra_prompt": "A compact fully integrated European refrigerator, 540 mm wide, 1215 mm high, 545 mm deep, plain white installation body with concealed door mounting face, isolated appliance, exact proportions, origin at bottom center, Z axis up, front faces positive Y, no decorative cabinet front, no surrounding cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_FRIDGE_INTEGRATED_1770",
+      "category": "fridge",
+      "interface_id": "FRIDGE_INTEGRATED_1770",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.54, 0.545, 1.77],
+      "required_niche": {"min": [0.56, 0.55, 1.77], "max": [0.568, 0.57, 1.79]},
+      "front_behavior": "accepts_matching_kitchen_front_panel",
+      "ventilation_clearance": {"bottom": 0.02, "top": 0.02, "rear": 0.02},
+      "asset_path": "assets/appliances/APPL_FRIDGE_INTEGRATED_1770.glb",
+      "astra_prompt": "A tall fully integrated European refrigerator, 540 mm wide, 1770 mm high, 545 mm deep, plain white installation body with concealed door mounting face, isolated appliance, exact proportions, origin at bottom center, Z axis up, front faces positive Y, no decorative cabinet front, no surrounding cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_HOOD_INSERT_600",
+      "category": "extractor_hood",
+      "interface_id": "HOOD_INSERT_600",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.52, 0.28, 0.25],
+      "required_niche": {"min": [0.52, 0.28, 0.25], "max": [0.564, 0.32, 0.3]},
+      "exhaust_axis": "positive_z",
+      "asset_path": "assets/appliances/APPL_HOOD_INSERT_600.glb",
+      "astra_prompt": "A 600 mm class built-in cabinet extractor hood insert, 520 mm wide stainless steel rectangular body, 250 mm high, 280 mm deep, flat underside with filter and two lights, round exhaust outlet on top, isolated appliance, exact proportions, origin at bottom center, Z axis up, front faces positive Y, no cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_HOOD_INSERT_800",
+      "category": "extractor_hood",
+      "interface_id": "HOOD_INSERT_800",
+      "origin": "bottom_center_of_installation_body",
+      "body_size": [0.72, 0.28, 0.25],
+      "required_niche": {"min": [0.72, 0.28, 0.25], "max": [0.764, 0.32, 0.3]},
+      "exhaust_axis": "positive_z",
+      "asset_path": "assets/appliances/APPL_HOOD_INSERT_800.glb",
+      "astra_prompt": "An 800 mm class built-in cabinet extractor hood insert, 720 mm wide stainless steel rectangular body, 250 mm high, 280 mm deep, flat underside with filters and two lights, round exhaust outlet on top, isolated appliance, exact proportions, origin at bottom center, Z axis up, front faces positive Y, no cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_SINK_SINGLE_500_STEEL",
+      "category": "sink",
+      "interface_id": "SINK_600",
+      "origin": "center_of_top_mounting_plane",
+      "body_size": [0.5, 0.4, 0.2],
+      "rim_size": [0.53, 0.43, 0.02],
+      "required_cutout": [0.49, 0.39],
+      "worktop_cutout": {"shape": "rectangle", "size": [0.49, 0.39]},
+      "minimum_base_width": 0.6,
+      "asset_path": "assets/appliances/APPL_SINK_SINGLE_500_STEEL.glb",
+      "astra_prompt": "A single-bowl inset kitchen sink in brushed stainless steel, outer rim 530 by 430 mm, bowl 500 by 400 mm and 200 mm deep, thin flat rim, centered drain, isolated object, exact real-world proportions, origin at center of top rim, no worktop, no faucet, no text or logos."
+    },
+    {
+      "id": "APPL_SINK_SINGLE_700_STEEL",
+      "category": "sink",
+      "interface_id": "SINK_800",
+      "origin": "center_of_top_mounting_plane",
+      "body_size": [0.7, 0.4, 0.2],
+      "rim_size": [0.73, 0.43, 0.02],
+      "required_cutout": [0.69, 0.39],
+      "worktop_cutout": {"shape": "rectangle", "size": [0.69, 0.39]},
+      "minimum_base_width": 0.8,
+      "asset_path": "assets/appliances/APPL_SINK_SINGLE_700_STEEL.glb",
+      "astra_prompt": "A large single-bowl inset kitchen sink in brushed stainless steel, outer rim 730 by 430 mm, bowl 700 by 400 mm and 200 mm deep, thin flat rim, centered drain, isolated object, exact real-world proportions, origin at center of top rim, no worktop, no faucet, no text or logos."
+    },
+    {
+      "id": "APPL_COOKTOP_600_BLACK",
+      "category": "cooktop",
+      "interface_id": "COOKTOP_600",
+      "origin": "center_of_top_mounting_plane",
+      "body_size": [0.56, 0.49, 0.055],
+      "visible_top_size": [0.59, 0.52, 0.006],
+      "required_cutout": [0.56, 0.49],
+      "worktop_cutout": {"shape": "rectangle", "size": [0.56, 0.49]},
+      "asset_path": "assets/appliances/APPL_COOKTOP_600_BLACK.glb",
+      "astra_prompt": "A modern 600 mm black glass induction cooktop, visible top 590 by 520 mm, 55 mm installation depth, four subtle cooking zones and minimal touch controls, isolated appliance, exact proportions, origin at center of top plane, Z axis up, front faces positive Y, no worktop, no pans, no text or logos."
+    },
+    {
+      "id": "APPL_COOKTOP_800_BLACK",
+      "category": "cooktop",
+      "interface_id": "COOKTOP_800",
+      "origin": "center_of_top_mounting_plane",
+      "body_size": [0.75, 0.49, 0.055],
+      "visible_top_size": [0.78, 0.52, 0.006],
+      "required_cutout": [0.75, 0.49],
+      "worktop_cutout": {"shape": "rectangle", "size": [0.75, 0.49]},
+      "asset_path": "assets/appliances/APPL_COOKTOP_800_BLACK.glb",
+      "astra_prompt": "A modern 800 mm black glass induction cooktop, visible top 780 by 520 mm, 55 mm installation depth, five subtle cooking zones and minimal touch controls, isolated appliance, exact proportions, origin at center of top plane, Z axis up, front faces positive Y, no worktop, no pans, no text or logos."
+    },
+    {
+      "id": "APPL_FAUCET_U_CHROME",
+      "category": "faucet",
+      "interface_id": "FAUCET_STANDARD",
+      "origin": "center_of_mounting_hole_on_worktop_plane",
+      "body_size": [0.08, 0.24, 0.38],
+      "required_mount_hole_diameter": 0.035,
+      "worktop_cutout": {"shape": "circle", "diameter": 0.035},
+      "required_rear_clearance": 0.06,
+      "asset_path": "assets/appliances/APPL_FAUCET_U_CHROME.glb",
+      "astra_prompt": "A modern chrome U-shaped kitchen mixer faucet, 380 mm high, 240 mm reach, 35 mm mounting stem, single side lever, isolated object, accurate real-world proportions, origin at center of mounting hole on countertop, up axis positive Z, spout faces positive Y, no sink, no worktop, no text or logos."
+    },
+    {
+      "id": "APPL_FAUCET_U_BLACK",
+      "category": "faucet",
+      "interface_id": "FAUCET_STANDARD",
+      "origin": "center_of_mounting_hole_on_worktop_plane",
+      "body_size": [0.08, 0.24, 0.38],
+      "required_mount_hole_diameter": 0.035,
+      "worktop_cutout": {"shape": "circle", "diameter": 0.035},
+      "required_rear_clearance": 0.06,
+      "asset_path": "assets/appliances/APPL_FAUCET_U_BLACK.glb",
+      "astra_prompt": "A modern matte black U-shaped kitchen mixer faucet, 380 mm high, 240 mm reach, 35 mm mounting stem, single side lever, isolated object, accurate real-world proportions, origin at center of mounting hole on countertop, up axis positive Z, spout faces positive Y, no sink, no worktop, no text or logos."
+    },
+    {
+      "id": "APPL_FRIDGE_FREESTANDING_600_STEEL",
+      "category": "fridge",
+      "interface_id": "STANDALONE",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [0.6, 0.65, 1.85],
+      "placement": {"mode": "floor", "default_bottom_elevation": 0.0},
+      "asset_path": "assets/appliances/APPL_FRIDGE_FREESTANDING_600_STEEL.glb",
+      "astra_prompt": "A modern freestanding European kitchen refrigerator-freezer, 600 mm wide, 650 mm deep and 1850 mm high, brushed stainless steel, two vertically stacked doors with subtle recessed handles, isolated complete appliance, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, front faces positive Y, no surrounding cabinet, no text or logos."
+    },
+    {
+      "id": "APPL_HOOD_CHIMNEY_600_STEEL",
+      "category": "extractor_hood",
+      "interface_id": "STANDALONE",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [0.6, 0.5, 0.65],
+      "placement": {"mode": "wall", "default_bottom_elevation": 1.42},
+      "asset_path": "assets/appliances/APPL_HOOD_CHIMNEY_600_STEEL.glb",
+      "astra_prompt": "A wall-mounted 600 mm stainless steel chimney kitchen extractor hood, 600 mm wide, 500 mm deep and 650 mm total high, slim canopy with grease filters beneath and centered rectangular chimney above, isolated complete appliance, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, front faces positive Y, back faces negative Y, no wall or cabinets, no text or logos."
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_FURNITURE",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "model_policy": {
+    "model_format": "glb",
+    "model_scale": 1.0,
+    "origin": "bottom_center_of_external_bounding_box",
+    "front_axis": "positive_y",
+    "up_axis": "positive_z",
+    "fixed_dimensions": true
+  },
+  "furniture": [
+    {
+      "id": "FURN_TABLE_DINING_1400_OAK",
+      "category": "table",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [1.4, 0.8, 0.75],
+      "placement": {"mode": "floor", "default_bottom_elevation": 0.0},
+      "asset_path": "assets/furniture/FURN_TABLE_DINING_1400_OAK.glb",
+      "astra_prompt": "A simple modern rectangular dining table for a European kitchen, natural oak top and four straight oak legs, 1400 mm wide, 800 mm deep and 750 mm high, isolated complete object, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, long side along X, front faces positive Y, no chairs, tableware, text or logos."
+    },
+    {
+      "id": "FURN_TABLE_ROUND_1000_OAK",
+      "category": "table",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [1.0, 1.0, 0.75],
+      "placement": {"mode": "floor", "default_bottom_elevation": 0.0},
+      "asset_path": "assets/furniture/FURN_TABLE_ROUND_1000_OAK.glb",
+      "astra_prompt": "A simple modern round dining table for a European kitchen, natural oak circular top and one stable centered pedestal base, 1000 mm diameter and 750 mm high, isolated complete object, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, front faces positive Y, no chairs, tableware, text or logos."
+    },
+    {
+      "id": "FURN_CHAIR_DINING_OAK",
+      "category": "chair",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [0.48, 0.52, 0.82],
+      "placement": {"mode": "floor", "default_bottom_elevation": 0.0},
+      "asset_path": "assets/furniture/FURN_CHAIR_DINING_OAK.glb",
+      "astra_prompt": "A single modern Scandinavian dining chair for a kitchen, natural oak frame, gently curved backrest and neutral upholstered seat, 480 mm wide, 520 mm deep and 820 mm high, isolated complete object, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, seat front faces positive Y, no table, text or logos."
+    },
+    {
+      "id": "FURN_STOOL_COUNTER_BLACK",
+      "category": "stool",
+      "origin": "bottom_center_of_external_bounding_box",
+      "body_size": [0.42, 0.42, 0.68],
+      "placement": {"mode": "floor", "default_bottom_elevation": 0.0},
+      "asset_path": "assets/furniture/FURN_STOOL_COUNTER_BLACK.glb",
+      "astra_prompt": "A single modern counter-height kitchen stool, matte black metal frame with a dark upholstered seat and low backrest, 420 mm wide, 420 mm deep and 680 mm high, isolated complete object, exact real-world proportions, origin at bottom center of external bounding box, Z axis up, seat front faces positive Y, no counter, text or logos."
+    }
+  ]
+}

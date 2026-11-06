@@ -1,0 +1,94 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_FRONT_STYLES",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "generation_policy": {
+    "mode": "procedural",
+    "panel_size": "derived_from_cabinet_front_opening",
+    "panel_thickness": 0.018,
+    "gap_between_panels": 0.002,
+    "edge_gap": 0.002,
+    "movable_part_name_pattern": "front_panel_{two_digit_panel_index}[_part_name]",
+    "movable_part_grouping": "meshes sharing the same front_panel_NN prefix move as one door or drawer",
+    "drawer_box": {
+      "mode": "editor_procedural_from_cabinet_dimensions",
+      "side_thickness": 0.012,
+      "bottom_thickness": 0.012,
+      "side_clearance_each": 0.02,
+      "rear_clearance": 0.07,
+      "front_clearance": 0.025,
+      "maximum_side_height": 0.18,
+      "vertical_clearance": 0.04,
+      "material": {"base_color": "#BFC2C2", "roughness": 0.58, "metallic": 0.18}
+    },
+    "panel_ratio_order": "top_to_bottom",
+    "model_format": "glb",
+    "origin": "layout_bottom_center_on_back_surface",
+    "normal_axis": "positive_y",
+    "height_axis": "positive_z"
+  },
+  "layout_presets": [
+    {"id": "DOOR_SINGLE", "kind": "door", "rows": 1, "columns": 1, "panel_ratios": [1.0], "template_size": [0.6, 0.8], "handle_group": "single_door"},
+    {"id": "DOOR_DOUBLE", "kind": "door", "rows": 1, "columns": 2, "panel_ratios": [0.5, 0.5], "template_size": [0.6, 0.8], "handle_group": "double_door"},
+    {"id": "DOOR_HORIZONTAL", "kind": "door", "rows": 1, "columns": 1, "panel_ratios": [1.0], "template_size": [0.6, 0.4], "hinge_edge": "top", "handle_group": "horizontal_door"},
+    {"id": "DRAWERS_2", "kind": "drawer", "rows": 2, "columns": 1, "panel_ratios": [0.5, 0.5], "template_size": [0.6, 0.8], "handle_group": "drawer_stack"},
+    {"id": "DRAWERS_3", "kind": "drawer", "rows": 3, "columns": 1, "panel_ratios": [0.25, 0.375, 0.375], "template_size": [0.6, 0.8], "handle_group": "drawer_stack"},
+    {"id": "DRAWERS_4", "kind": "drawer", "rows": 4, "columns": 1, "panel_ratios": [0.25, 0.25, 0.25, 0.25], "template_size": [0.6, 0.8], "handle_group": "drawer_stack"},
+    {"id": "DOOR_SINGLE_VERTICAL_2", "kind": "door", "rows": 2, "columns": 1, "panel_ratios": [0.5, 0.5], "template_size": [0.6, 2.0], "handle_group": "single_door_each_row"},
+    {"id": "DOOR_DOUBLE_VERTICAL_2", "kind": "door", "rows": 2, "columns": 2, "panel_ratios": [0.25, 0.25, 0.25, 0.25], "template_size": [0.6, 2.0], "handle_group": "double_door_each_row"},
+    {"id": "APPLIANCE_OVEN_WITH_BOTTOM_PANEL", "kind": "mixed", "zones": ["oven_600", "bottom_fixed_panel"], "handle_group": "none"},
+    {"id": "APPLIANCE_OVEN_WITH_SIDE_FILLERS", "kind": "mixed", "zones": ["left_filler", "oven_600", "right_filler"], "handle_group": "none"},
+    {"id": "TALL_OVEN_MIDDLE", "kind": "mixed", "zones": ["bottom_door", "oven_600", "top_door"], "handle_group": "single_door_each_storage_zone"},
+    {"id": "TALL_FRIDGE_1220", "kind": "mixed", "zones": ["integrated_fridge_front_1220", "top_door"], "handle_group": "single_door_each_zone"},
+    {"id": "TALL_FRIDGE_1770", "kind": "mixed", "zones": ["integrated_fridge_front_1770"], "handle_group": "single_door"},
+    {"id": "TALL_FRIDGE_1770_WITH_TOP_STORAGE", "kind": "mixed", "zones": ["integrated_fridge_front_1770", "top_door"], "handle_group": "single_door_each_zone"}
+  ],
+  "styles": [
+    {
+      "id": "FRONT_FLAT_MATTE_WHITE",
+      "name": "Flat matte white",
+      "geometry": {"profile": "flat", "edge_radius": 0.002},
+      "material": {"base_color": "#F1F0EB", "roughness": 0.72, "metallic": 0.0},
+      "asset_path_template": "assets/fronts/flat_matte_white/{layout_id}_{width_mm}x{height_mm}.glb"
+    },
+    {
+      "id": "FRONT_FLAT_MATTE_GREY",
+      "name": "Flat matte grey",
+      "geometry": {"profile": "flat", "edge_radius": 0.002},
+      "material": {"base_color": "#8A8D8F", "roughness": 0.75, "metallic": 0.0},
+      "asset_path_template": "assets/fronts/flat_matte_grey/{layout_id}_{width_mm}x{height_mm}.glb"
+    },
+    {
+      "id": "FRONT_FLAT_OAK",
+      "name": "Flat natural oak",
+      "geometry": {"profile": "flat", "edge_radius": 0.002},
+      "material": {"base_color": "#B88955", "roughness": 0.62, "metallic": 0.0, "texture_set": "oak_natural_vertical"},
+      "asset_path_template": "assets/fronts/flat_oak/{layout_id}_{width_mm}x{height_mm}.glb"
+    },
+    {
+      "id": "FRONT_SHAKER_WHITE",
+      "name": "Shaker white",
+      "geometry": {"profile": "shaker", "frame_width": 0.07, "recess_depth": 0.006, "edge_radius": 0.002},
+      "material": {"base_color": "#EFEDE5", "roughness": 0.68, "metallic": 0.0},
+      "minimum_panel_size": [0.25, 0.3],
+      "asset_path_template": "assets/fronts/shaker_white/{layout_id}_{width_mm}x{height_mm}.glb"
+    },
+    {
+      "id": "FRONT_SHAKER_DARK_GREEN",
+      "name": "Shaker dark green",
+      "geometry": {"profile": "shaker", "frame_width": 0.07, "recess_depth": 0.006, "edge_radius": 0.002},
+      "material": {"base_color": "#294B3D", "roughness": 0.7, "metallic": 0.0},
+      "minimum_panel_size": [0.25, 0.3],
+      "asset_path_template": "assets/fronts/shaker_dark_green/{layout_id}_{width_mm}x{height_mm}.glb"
+    },
+    {
+      "id": "FRONT_RIBBED_WALNUT",
+      "name": "Ribbed walnut",
+      "geometry": {"profile": "vertical_ribbed", "rib_pitch": 0.018, "rib_depth": 0.004, "edge_radius": 0.001},
+      "material": {"base_color": "#66462F", "roughness": 0.64, "metallic": 0.0, "texture_set": "walnut_vertical"},
+      "minimum_panel_size": [0.3, 0.3],
+      "asset_path_template": "assets/fronts/ribbed_walnut/{layout_id}_{width_mm}x{height_mm}.glb"
+    }
+  ]
+}

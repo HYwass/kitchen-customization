@@ -1,0 +1,104 @@
+{
+  "version": "1.1.0",
+  "defaultPlanCount": 3,
+  "rules": {
+    "hardRequirementsShared": true,
+    "roomAndOpeningsShared": true,
+    "fullPipelinePerPlan": "user_selectable",
+    "cosmeticOnlyVariationForbidden": true,
+    "minimumPairwiseVisibleDifference": 0.22,
+    "minimumPairwiseDifferenceSignals": 2
+  },
+  "profiles": [
+    {
+      "id": "function_rich",
+      "label": "功能丰富",
+      "summary": "在满足硬约束的前提下，提供更完整的电器、储物和操作功能。",
+      "generationDirectives": [
+        "必须保留基础功能：水槽、水龙头、灶台、油烟机和烤箱。",
+        "空间允许时优先加入冰箱、洗碗机、高柜、抽屉柜和连续备餐区。",
+        "优先增加功能种类和储物能力，但不得以缩窄安全通道或遮挡门窗为代价。",
+        "在三个方案中使用最多的有效储物柜、吊柜和功能柜；空间允许时至少包含一个高柜，并使其电器或柜体构成明显区别于宽敞方案。"
+      ],
+      "upfrontDifferentiation": {
+        "layoutPolicy": "在用户没有锁定布局时，优先选择能够容纳最多功能分区的合法布局；布局被锁定时，仍采用更丰富的柜体与电器组合。",
+        "cabinetPolicy": "三案中柜体功能种类最多；空间允许时必须包含至少一个高柜、抽屉柜以及更完整的吊柜储物。",
+        "appliancePolicy": "保留全部基础电器，并优先加入冰箱和洗碗机；软性可选电器由本方案优先承担。",
+        "visibleCommitments": [
+          "使用三案中最丰富的电器和功能柜组合",
+          "使用三案中更完整的高柜与吊柜储物构成",
+          "不以减少柜体数量来营造宽敞感"
+        ]
+      },
+      "comparisonWeights": {
+        "hardValidity": 0.15,
+        "functionalCompleteness": 0.3,
+        "functionalVariety": 0.2,
+        "estimatedStorageVolume": 0.15,
+        "worktopArea": 0.1,
+        "compactness": 0.1,
+        "spaciousness": 0.0
+      }
+    },
+    {
+      "id": "space_efficient",
+      "label": "空间利用率高",
+      "summary": "充分利用可用墙面，减少内部空隙，并提高单位房间面积的储物和工作台能力。",
+      "generationDirectives": [
+        "优先提高有效墙面利用率、柜体连续性和转角利用率。",
+        "通过标准模块组合减少端部余量，禁止用重叠或越界伪造紧凑性。",
+        "在满足通道和基础功能后，提高单位房间面积的储物体积和工作台面积。",
+        "若房间允许多个合法布局，优先选择比另外两案使用更多有效墙段的布局；若布局被用户锁定，则通过角柜、模块宽度组合和功能分区形成明显不同的平面组织。"
+      ],
+      "upfrontDifferentiation": {
+        "layoutPolicy": "在用户没有锁定布局时，优先使用最多的连续有效墙段以及合法转角；布局被锁定时，优先优化模块宽度组合和端部余量。",
+        "cabinetPolicy": "优先连续满铺、角柜利用和标准宽度组合，使内部空隙及端部余量最小，而非单纯堆叠最多柜体。",
+        "appliancePolicy": "保留全部基础电器；冰箱和洗碗机仅在不破坏连续工作区与通道时加入。",
+        "visibleCommitments": [
+          "使用三案中最多的有效墙段或最充分的转角组织",
+          "达到三案中最高的连续柜体墙面利用率",
+          "平面轮廓和模块节奏必须区别于功能丰富方案"
+        ]
+      },
+      "comparisonWeights": {
+        "hardValidity": 0.15,
+        "functionalCompleteness": 0.1,
+        "functionalVariety": 0.05,
+        "estimatedStorageVolume": 0.2,
+        "worktopArea": 0.15,
+        "compactness": 0.3,
+        "spaciousness": 0.05
+      }
+    },
+    {
+      "id": "spacious",
+      "label": "宽敞通透",
+      "summary": "保留完整基础烹饪功能，同时减少不必要的落地占用并扩大自由活动空间。",
+      "generationDirectives": [
+        "必须保留基础功能，但避免加入用户未要求且会明显侵占通道的家具或可选设备。",
+        "优先选择较少且组织清晰的连续柜体组，保留较大的自由地面区域。",
+        "不得通过删除水槽、灶台、油烟机、烤箱或必要备餐区来换取表面上的宽敞。",
+        "在三个方案中使用最少的非必要落地柜和吊柜，避免整面墙铺满吊柜；高柜原则上不超过一个，除非冰箱和用户硬性需求确实需要更多。"
+      ],
+      "upfrontDifferentiation": {
+        "layoutPolicy": "在用户没有锁定布局时，优先采用占用墙段较少且保持最大连续自由地面的合法布局；布局被锁定时，缩短非必要柜体延伸。",
+        "cabinetPolicy": "三案中非必要落地柜和吊柜最少；避免整墙吊柜，高柜原则上不超过一个。",
+        "appliancePolicy": "保留全部基础电器；除非用户明确要求，否则不为可选电器牺牲明显的自由活动空间。",
+        "visibleCommitments": [
+          "使用三案中最少的非必要落地柜和吊柜",
+          "保留三案中最大的连续自由地面和视觉留白",
+          "不采用功能丰富方案的高密度储物构成"
+        ]
+      },
+      "comparisonWeights": {
+        "hardValidity": 0.2,
+        "functionalCompleteness": 0.2,
+        "functionalVariety": 0.05,
+        "estimatedStorageVolume": 0.0,
+        "worktopArea": 0.05,
+        "compactness": 0.1,
+        "spaciousness": 0.4
+      }
+    }
+  ]
+}

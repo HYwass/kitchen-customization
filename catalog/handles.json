@@ -1,0 +1,84 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_HANDLES",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "coordinate_system": {
+    "origin": "mounting_pattern_center_on_front_surface",
+    "forward_axis": "positive_y",
+    "up_axis": "positive_z",
+    "model_format": "glb"
+  },
+  "placement_presets": {
+    "single_door": ["left_top", "left_middle", "left_bottom", "right_top", "right_middle", "right_bottom"],
+    "double_door": ["seam_top", "seam_middle", "seam_bottom"],
+    "horizontal_door": ["bottom_center", "top_center"],
+    "drawer": ["center"]
+  },
+  "placement_rules": {
+    "edge_offset": 0.05,
+    "top_bottom_offset": 0.06,
+    "double_door_handles": "instantiate_one_handle_per_door_near_center_seam",
+    "drawer_handles": "instantiate_one_handle_per_drawer_panel",
+    "orientation_for_vertical_door": "vertical",
+    "orientation_for_drawer": "horizontal"
+  },
+  "handles": [
+    {
+      "id": "HANDLE_BAR_160_BLACK",
+      "type": "bar",
+      "dimensions": [0.19, 0.032, 0.012],
+      "hole_spacing": 0.16,
+      "material": {"base_color": "#1C1C1C", "roughness": 0.42, "metallic": 0.65},
+      "asset_path": "assets/handles/HANDLE_BAR_160_BLACK.glb",
+      "astra_prompt": "A single modern matte black kitchen cabinet bar handle, 190 mm overall length, 160 mm screw hole spacing, 12 mm thick, 32 mm projection, clean rectangular supports, isolated object, accurate real-world proportions, centered origin at mounting pattern, no cabinet door, no text."
+    },
+    {
+      "id": "HANDLE_BAR_320_STEEL",
+      "type": "bar",
+      "dimensions": [0.35, 0.035, 0.014],
+      "hole_spacing": 0.32,
+      "material": {"base_color": "#B7BCC0", "roughness": 0.3, "metallic": 0.9},
+      "asset_path": "assets/handles/HANDLE_BAR_320_STEEL.glb",
+      "astra_prompt": "A single brushed stainless steel kitchen cabinet bar handle, 350 mm overall length, 320 mm screw hole spacing, 14 mm diameter, 35 mm projection, simple cylindrical form, isolated object, accurate real-world proportions, centered origin at mounting pattern, no cabinet door, no text."
+    },
+    {
+      "id": "HANDLE_KNOB_ROUND_BLACK",
+      "type": "knob",
+      "dimensions": [0.032, 0.028, 0.032],
+      "hole_spacing": 0.0,
+      "material": {"base_color": "#202020", "roughness": 0.48, "metallic": 0.55},
+      "asset_path": "assets/handles/HANDLE_KNOB_ROUND_BLACK.glb",
+      "astra_prompt": "A single round matte black kitchen cabinet knob, 32 mm diameter and 28 mm projection, short centered stem, isolated object, accurate real-world scale, mounting point at origin, no cabinet door, no text."
+    },
+    {
+      "id": "HANDLE_KNOB_ROUND_BRASS",
+      "type": "knob",
+      "dimensions": [0.032, 0.028, 0.032],
+      "hole_spacing": 0.0,
+      "material": {"base_color": "#B08D57", "roughness": 0.32, "metallic": 0.88},
+      "asset_path": "assets/handles/HANDLE_KNOB_ROUND_BRASS.glb",
+      "astra_prompt": "A single round brushed brass kitchen cabinet knob, 32 mm diameter and 28 mm projection, short centered stem, isolated object, accurate real-world scale, mounting point at origin, no cabinet door, no text."
+    },
+    {
+      "id": "HANDLE_CUP_96_BRASS",
+      "type": "cup_pull",
+      "dimensions": [0.12, 0.025, 0.038],
+      "hole_spacing": 0.096,
+      "allowed_front_kinds": ["drawer", "horizontal_door"],
+      "material": {"base_color": "#A77E45", "roughness": 0.38, "metallic": 0.82},
+      "asset_path": "assets/handles/HANDLE_CUP_96_BRASS.glb",
+      "astra_prompt": "A single traditional brushed brass cup pull for a kitchen drawer, 120 mm wide, 96 mm screw hole spacing, 38 mm high, 25 mm projection, smooth shell shape, isolated object, accurate scale, no drawer front, no text."
+    },
+    {
+      "id": "HANDLE_EDGE_200_BLACK",
+      "type": "edge_pull",
+      "dimensions": [0.2, 0.018, 0.025],
+      "hole_spacing": 0.16,
+      "allowed_front_kinds": ["door", "drawer"],
+      "material": {"base_color": "#171717", "roughness": 0.4, "metallic": 0.7},
+      "asset_path": "assets/handles/HANDLE_EDGE_200_BLACK.glb",
+      "astra_prompt": "A single minimalist matte black edge pull for an 18 mm kitchen cabinet front, 200 mm wide, slim folded metal profile, 25 mm grip height, 18 mm depth, isolated object, accurate scale, no cabinet front, no text."
+    }
+  ]
+}

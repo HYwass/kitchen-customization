@@ -1,0 +1,606 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_CABINETS",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "coordinate_system": {
+    "handedness": "right_handed",
+    "axes": {
+      "x": "cabinet_left_to_right",
+      "y": "cabinet_back_to_front",
+      "z": "up"
+    },
+    "item_origin": "bottom_center_of_external_bounding_box",
+    "front_plane": "positive_y",
+    "rotation_convention": "yaw_is_rotation_about_positive_z_in_radians"
+  },
+  "source": {
+    "document": "../metod-cabinets-guide.pdf",
+    "system": "IKEA_METOD",
+    "scope": "Cabinet frame dimensions from guide pages 8-12. Corner footprints use the planning diagrams on page 9. Appliance openings are project V1 assumptions, not manufacturer installation specifications."
+  },
+  "construction_defaults": {
+    "panel_thickness": 0.018,
+    "back_panel_thickness": 0.003,
+    "front_gap": 0.002,
+    "base_floor_clearance": 0.08,
+    "worktop_clearance_above_base": 0.0,
+    "nominal_internal_depth_by_external_depth": {
+      "0.37": 0.32,
+      "0.60": 0.55
+    },
+    "model_format": "glb",
+    "model_scale": 1.0
+  },
+  "placement_rules": {
+    "base": {
+      "mount": "floor",
+      "bottom_elevation": 0.08,
+      "wall_alignment": "back"
+    },
+    "wall": {
+      "mount": "wall",
+      "recommended_min_bottom_above_worktop": 0.5,
+      "wall_alignment": "back"
+    },
+    "high": {
+      "mount": "floor",
+      "bottom_elevation": 0.08,
+      "wall_alignment": "back"
+    },
+    "top": {
+      "mount": "above_appliance_or_high_cabinet",
+      "wall_alignment": "back"
+    }
+  },
+  "slot_profiles": {
+    "BASE_STANDARD": {
+      "storage_cavity": {
+        "mount_type": "cavity",
+        "size_formula": {
+          "width": "cabinet.width - 2 * panel_thickness",
+          "depth": "nominal_internal_depth",
+          "height": "cabinet.height - 2 * panel_thickness"
+        }
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": [
+          "DOOR_SINGLE",
+          "DOOR_DOUBLE",
+          "DRAWERS_2",
+          "DRAWERS_3",
+          "DRAWERS_4"
+        ]
+      },
+      "worktop": {
+        "mount_type": "top_surface",
+        "enabled": true,
+        "supports_run_merge": true
+      }
+    },
+    "BASE_BUILTIN_600": {
+      "front": {
+        "mount_type": "front_plane",
+        "layout_controlled_by_configuration": true
+      },
+      "worktop": {
+        "mount_type": "top_surface",
+        "enabled": true,
+        "supports_run_merge": true
+      },
+      "configurations": {
+        "oven": {
+          "interface_id": "OVEN_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "cavity",
+            "local_center": [0.0, -0.025, 0.4],
+            "niche_size": [0.564, 0.55, 0.6],
+            "front_flush_y": 0.3
+          },
+          "appliance_slots": [
+            {
+              "id": "oven_cavity",
+              "interface_id": "OVEN_600",
+              "slot": {
+                "mount_type": "cavity",
+                "local_center": [0.0, -0.025, 0.4],
+                "niche_size": [0.564, 0.55, 0.6],
+                "front_flush_y": 0.3
+              }
+            },
+            {
+              "id": "cooktop_cutout",
+              "interface_id": "COOKTOP_600",
+              "slot": {
+                "mount_type": "worktop_cutout",
+                "local_center": [0.0, 0.0, 0.8],
+                "max_cutout_size": [0.56, 0.49],
+                "cutout_center_xy": [0.0, 0.0]
+              }
+            }
+          ],
+          "front_layout_id": "APPLIANCE_OVEN_WITH_BOTTOM_PANEL"
+        },
+        "sink": {
+          "interface_id": "SINK_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [0.0, 0.0, 0.8],
+            "max_cutout_size": [0.54, 0.48],
+            "cutout_center_xy": [0.0, 0.0]
+          },
+          "appliance_slots": [
+            {
+              "id": "sink_cutout",
+              "interface_id": "SINK_600",
+              "slot": {
+                "mount_type": "worktop_cutout",
+                "local_center": [0.0, 0.0, 0.8],
+                "max_cutout_size": [0.54, 0.48],
+                "cutout_center_xy": [0.0, 0.0]
+              }
+            },
+            {
+              "id": "faucet_mount",
+              "interface_id": "FAUCET_STANDARD",
+              "slot": {
+                "mount_type": "worktop_mount_hole",
+                "local_center": [0.0, -0.22, 0.8],
+                "max_hole_diameter": 0.05
+              }
+            }
+          ],
+          "secondary_interface_ids": ["FAUCET_STANDARD"],
+          "front_layout_id": "DOOR_DOUBLE"
+        },
+        "cooktop": {
+          "interface_id": "COOKTOP_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [0.0, 0.0, 0.8],
+            "max_cutout_size": [0.56, 0.49],
+            "cutout_center_xy": [0.0, 0.0]
+          },
+          "front_layout_id": "DRAWERS_2"
+        }
+      }
+    },
+    "BASE_BUILTIN_800": {
+      "front": {
+        "mount_type": "front_plane",
+        "layout_controlled_by_configuration": true
+      },
+      "worktop": {
+        "mount_type": "top_surface",
+        "enabled": true,
+        "supports_run_merge": true
+      },
+      "configurations": {
+        "oven": {
+          "interface_id": "OVEN_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "cavity_with_side_fillers",
+            "local_center": [0.0, -0.025, 0.4],
+            "niche_size": [0.568, 0.55, 0.6],
+            "side_filler_width_each": 0.098,
+            "front_flush_y": 0.3
+          },
+          "appliance_slots": [
+            {
+              "id": "oven_cavity",
+              "interface_id": "OVEN_600",
+              "slot": {
+                "mount_type": "cavity_with_side_fillers",
+                "local_center": [0.0, -0.025, 0.4],
+                "niche_size": [0.568, 0.55, 0.6],
+                "side_filler_width_each": 0.098,
+                "front_flush_y": 0.3
+              }
+            },
+            {
+              "id": "cooktop_cutout",
+              "interface_id": "COOKTOP_800",
+              "slot": {
+                "mount_type": "worktop_cutout",
+                "local_center": [0.0, 0.0, 0.8],
+                "max_cutout_size": [0.75, 0.49],
+                "cutout_center_xy": [0.0, 0.0]
+              }
+            }
+          ],
+          "front_layout_id": "APPLIANCE_OVEN_WITH_SIDE_FILLERS"
+        },
+        "sink": {
+          "interface_id": "SINK_800",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [0.0, 0.0, 0.8],
+            "max_cutout_size": [0.74, 0.48],
+            "cutout_center_xy": [0.0, 0.0]
+          },
+          "appliance_slots": [
+            {
+              "id": "sink_cutout",
+              "interface_id": "SINK_800",
+              "slot": {
+                "mount_type": "worktop_cutout",
+                "local_center": [0.0, 0.0, 0.8],
+                "max_cutout_size": [0.74, 0.48],
+                "cutout_center_xy": [0.0, 0.0]
+              }
+            },
+            {
+              "id": "faucet_mount",
+              "interface_id": "FAUCET_STANDARD",
+              "slot": {
+                "mount_type": "worktop_mount_hole",
+                "local_center": [0.0, -0.22, 0.8],
+                "max_hole_diameter": 0.05
+              }
+            }
+          ],
+          "secondary_interface_ids": ["FAUCET_STANDARD"],
+          "front_layout_id": "DOOR_DOUBLE"
+        },
+        "cooktop": {
+          "interface_id": "COOKTOP_800",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [0.0, 0.0, 0.8],
+            "max_cutout_size": [0.75, 0.49],
+            "cutout_center_xy": [0.0, 0.0]
+          },
+          "front_layout_id": "DRAWERS_2"
+        }
+      }
+    },
+    "BASE_CORNER_BLIND": {
+      "storage_cavity": {
+        "mount_type": "blind_corner_cavity",
+        "size_formula": {
+          "accessible_width": "corner_geometry.accessible_front_width",
+          "depth": "nominal_internal_depth",
+          "height": "cabinet.height - 2 * panel_thickness"
+        }
+      },
+      "front": {
+        "mount_type": "offset_front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE"]
+      },
+      "worktop": {
+        "mount_type": "top_surface",
+        "enabled": true,
+        "supports_run_merge": true
+      }
+    },
+    "BASE_CORNER_DIAGONAL": {
+      "storage_cavity": {
+        "mount_type": "diagonal_corner_cavity"
+      },
+      "front": {
+        "mount_type": "diagonal_front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE", "DOOR_DOUBLE"]
+      },
+      "worktop": {
+        "mount_type": "corner_top_surface",
+        "enabled": true,
+        "supports_run_merge": false
+      }
+    },
+    "BASE_CORNER_DIAGONAL_BUILTIN": {
+      "front": {
+        "mount_type": "diagonal_front_plane",
+        "layout_controlled_by_configuration": true
+      },
+      "worktop": {
+        "mount_type": "corner_top_surface",
+        "enabled": true,
+        "supports_run_merge": false
+      },
+      "configurations": {
+        "sink": {
+          "interface_id": "SINK_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [-0.08, -0.08, 0.8],
+            "max_cutout_size": [0.54, 0.48],
+            "cutout_center_xy": [-0.08, -0.08]
+          },
+          "appliance_slots": [
+            {
+              "id": "sink_cutout",
+              "interface_id": "SINK_600",
+              "slot": {
+                "mount_type": "worktop_cutout",
+                "local_center": [-0.08, -0.08, 0.8],
+                "max_cutout_size": [0.54, 0.48],
+                "cutout_center_xy": [-0.08, -0.08]
+              }
+            },
+            {
+              "id": "faucet_mount",
+              "interface_id": "FAUCET_STANDARD",
+              "slot": {
+                "mount_type": "worktop_mount_hole",
+                "local_center": [-0.26, -0.26, 0.8],
+                "max_hole_diameter": 0.05
+              }
+            }
+          ],
+          "secondary_interface_ids": ["FAUCET_STANDARD"],
+          "front_layout_id": "DOOR_DOUBLE"
+        },
+        "cooktop": {
+          "interface_id": "COOKTOP_600",
+          "construction": {"omit_top_panel": true},
+          "slot": {
+            "mount_type": "worktop_cutout",
+            "local_center": [-0.08, -0.08, 0.8],
+            "max_cutout_size": [0.56, 0.49],
+            "cutout_center_xy": [-0.08, -0.08]
+          },
+          "front_layout_id": "DOOR_DOUBLE"
+        }
+      }
+    },
+    "WALL_STANDARD": {
+      "storage_cavity": {
+        "mount_type": "cavity",
+        "size_formula": {
+          "width": "cabinet.width - 2 * panel_thickness",
+          "depth": "nominal_internal_depth",
+          "height": "cabinet.height - 2 * panel_thickness"
+        }
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE", "DOOR_DOUBLE", "DOOR_HORIZONTAL"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    },
+    "WALL_CORNER_DIAGONAL": {
+      "storage_cavity": {
+        "mount_type": "diagonal_corner_cavity"
+      },
+      "front": {
+        "mount_type": "diagonal_front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE", "DOOR_DOUBLE"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    },
+    "WALL_HOOD_600": {
+      "construction": {"omit_bottom_panel": true, "omit_bottom_slot_support": true},
+      "appliance": {
+        "interface_id": "HOOD_INSERT_600",
+        "mount_type": "bottom_cavity",
+        "local_center": [0.0, -0.01, 0.17],
+        "niche_size": [0.564, 0.32, 0.3],
+        "exhaust_axis": "positive_z"
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE", "DOOR_DOUBLE"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    },
+    "WALL_HOOD_800": {
+      "construction": {"omit_bottom_panel": true, "omit_bottom_slot_support": true},
+      "appliance": {
+        "interface_id": "HOOD_INSERT_800",
+        "mount_type": "bottom_cavity",
+        "local_center": [0.0, -0.01, 0.17],
+        "niche_size": [0.764, 0.32, 0.3],
+        "exhaust_axis": "positive_z"
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_DOUBLE"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    },
+    "HIGH_STANDARD": {
+      "storage_cavity": {
+        "mount_type": "cavity",
+        "size_formula": {
+          "width": "cabinet.width - 2 * panel_thickness",
+          "depth": "nominal_internal_depth",
+          "height": "cabinet.height - 2 * panel_thickness"
+        }
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE_VERTICAL_2", "DOOR_DOUBLE_VERTICAL_2"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    },
+    "HIGH_BUILTIN_1400": {
+      "configurations": {
+        "oven": {
+          "interface_id": "OVEN_600",
+          "slot": {
+            "mount_type": "cavity",
+            "local_center": [0.0, -0.025, 0.8],
+            "niche_size": [0.564, 0.55, 0.6],
+            "front_flush_y": 0.3
+          },
+          "front_layout_id": "TALL_OVEN_MIDDLE"
+        },
+        "fridge": {
+          "interface_id": "FRIDGE_INTEGRATED_1220",
+          "slot": {
+            "mount_type": "ventilated_cavity",
+            "local_center": [0.0, -0.025, 0.628],
+            "niche_size": [0.564, 0.55, 1.22],
+            "ventilation_path": "bottom_to_top"
+          },
+          "front_layout_id": "TALL_FRIDGE_1220"
+        }
+      }
+    },
+    "HIGH_BUILTIN_2000": {
+      "configurations": {
+        "oven": {
+          "interface_id": "OVEN_600",
+          "slot": {
+            "mount_type": "cavity",
+            "local_center": [0.0, -0.025, 0.98],
+            "niche_size": [0.564, 0.55, 0.6],
+            "front_flush_y": 0.3
+          },
+          "front_layout_id": "TALL_OVEN_MIDDLE"
+        },
+        "fridge": {
+          "interface_id": "FRIDGE_INTEGRATED_1770",
+          "slot": {
+            "mount_type": "ventilated_cavity",
+            "local_center": [0.0, -0.025, 0.903],
+            "niche_size": [0.564, 0.55, 1.77],
+            "ventilation_path": "bottom_to_top"
+          },
+          "front_layout_id": "TALL_FRIDGE_1770"
+        }
+      }
+    },
+    "HIGH_BUILTIN_2200": {
+      "configurations": {
+        "oven": {
+          "interface_id": "OVEN_600",
+          "slot": {
+            "mount_type": "cavity",
+            "local_center": [0.0, -0.025, 0.98],
+            "niche_size": [0.564, 0.55, 0.6],
+            "front_flush_y": 0.3
+          },
+          "front_layout_id": "TALL_OVEN_MIDDLE"
+        },
+        "fridge": {
+          "interface_id": "FRIDGE_INTEGRATED_1770",
+          "slot": {
+            "mount_type": "ventilated_cavity",
+            "local_center": [0.0, -0.025, 0.903],
+            "niche_size": [0.564, 0.55, 1.77],
+            "ventilation_path": "bottom_to_top"
+          },
+          "front_layout_id": "TALL_FRIDGE_1770_WITH_TOP_STORAGE"
+        }
+      }
+    },
+    "BASE_DISHWASHER_BAY_600": {
+      "construction": {"carrier_only": true},
+      "appliance": {
+        "interface_id": "DISHWASHER_600",
+        "mount_type": "floor_bay",
+        "local_center": [0.0, 0.0, 0.3275],
+        "niche_size": [0.6, 0.6, 0.815],
+        "front_flush_y": 0.3
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE"]
+      },
+      "worktop": {
+        "mount_type": "top_surface",
+        "enabled": true,
+        "supports_run_merge": true
+      }
+    },
+    "TOP_STANDARD": {
+      "storage_cavity": {
+        "mount_type": "cavity",
+        "size_formula": {
+          "width": "cabinet.width - 2 * panel_thickness",
+          "depth": "nominal_internal_depth",
+          "height": "cabinet.height - 2 * panel_thickness"
+        }
+      },
+      "front": {
+        "mount_type": "front_plane",
+        "allowed_layout_ids": ["DOOR_SINGLE", "DOOR_DOUBLE", "DOOR_HORIZONTAL"]
+      },
+      "worktop": {
+        "enabled": false
+      }
+    }
+  },
+  "cabinet_models": [
+    {"id": "CAB_BASE_W200_D600_H800", "family": "base", "dimensions": [0.2, 0.6, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_BASE_W300_D370_H800", "family": "base", "dimensions": [0.3, 0.37, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_BASE_W300_D600_H800", "family": "base", "dimensions": [0.3, 0.6, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_BASE_W400_D370_H800", "family": "base", "dimensions": [0.4, 0.37, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_BASE_W400_D600_H800", "family": "base", "dimensions": [0.4, 0.6, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_BASE_W600_D370_H800", "family": "base", "dimensions": [0.6, 0.37, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10},
+    {"id": "CAB_BASE_W600_D600_H800", "family": "base", "dimensions": [0.6, 0.6, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10},
+    {"id": "CAB_BASE_W800_D370_H800", "family": "base", "dimensions": [0.8, 0.37, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10},
+    {"id": "CAB_BASE_W800_D600_H800", "family": "base", "dimensions": [0.8, 0.6, 0.8], "slot_profile_id": "BASE_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10},
+    {"id": "CAB_BASE_BUILTIN_W600_D600_H800", "family": "base", "variant": "built_in_oven_sink", "dimensions": [0.6, 0.6, 0.8], "slot_profile_id": "BASE_BUILTIN_600", "default_configuration": "oven", "source_page": 10},
+    {"id": "CAB_BASE_BUILTIN_W800_D600_H800", "family": "base", "variant": "built_in_oven_sink", "dimensions": [0.8, 0.6, 0.8], "slot_profile_id": "BASE_BUILTIN_800", "default_configuration": "sink", "source_page": 10},
+    {"id": "CAB_BASE_DISHWASHER_W600_D600_H800", "family": "base", "variant": "integrated_dishwasher_bay", "dimensions": [0.6, 0.6, 0.8], "slot_profile_id": "BASE_DISHWASHER_BAY_600", "default_front_layout_id": "DOOR_SINGLE", "source_page": null},
+    {"id": "CAB_BASE_CORNER_BLIND_LEFT_W1280_D600_H800", "family": "base", "variant": "corner_blind_left", "dimensions": [1.28, 0.6, 0.8], "slot_profile_id": "BASE_CORNER_BLIND", "default_front_layout_id": "DOOR_SINGLE", "corner_geometry": {"type": "blind", "accessible_side": "left", "accessible_front_width": 0.6, "blind_section_width": 0.68}, "source_nominal_dimensions": [1.28, 0.6, 0.8], "source_page": 10},
+    {"id": "CAB_BASE_CORNER_BLIND_RIGHT_W1280_D600_H800", "family": "base", "variant": "corner_blind_right", "dimensions": [1.28, 0.6, 0.8], "slot_profile_id": "BASE_CORNER_BLIND", "default_front_layout_id": "DOOR_SINGLE", "corner_geometry": {"type": "blind", "accessible_side": "right", "accessible_front_width": 0.6, "blind_section_width": 0.68}, "source_nominal_dimensions": [1.28, 0.6, 0.8], "source_page": 10},
+    {"id": "CAB_BASE_CORNER_DIAGONAL_W880_D880_H800", "family": "base", "variant": "corner_diagonal", "dimensions": [0.88, 0.88, 0.8], "slot_profile_id": "BASE_CORNER_DIAGONAL", "default_front_layout_id": "DOOR_DOUBLE", "corner_geometry": {"type": "diagonal", "wall_spans": [0.88, 0.88], "diagonal_front_width": 0.622}, "source_nominal_dimensions": [0.88, 0.6, 0.8], "source_planning_footprint": [0.875, 0.875], "source_page": 10},
+    {"id": "CAB_BASE_CORNER_DIAGONAL_BUILTIN_W880_D880_H800", "family": "base", "variant": "corner_diagonal_builtin", "dimensions": [0.88, 0.88, 0.8], "slot_profile_id": "BASE_CORNER_DIAGONAL_BUILTIN", "default_configuration": "sink", "corner_geometry": {"type": "diagonal", "wall_spans": [0.88, 0.88], "diagonal_front_width": 0.622}, "source_nominal_dimensions": [0.88, 0.6, 0.8], "source_planning_footprint": [0.875, 0.875], "source_page": 10},
+
+    {"id": "CAB_WALL_W200_D370_H800", "family": "wall", "dimensions": [0.2, 0.37, 0.8], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_WALL_W300_D370_H600", "family": "wall", "dimensions": [0.3, 0.37, 0.6], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_WALL_W300_D370_H800", "family": "wall", "dimensions": [0.3, 0.37, 0.8], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_WALL_W400_D370_H400", "family": "wall", "dimensions": [0.4, 0.37, 0.4], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_HORIZONTAL", "source_page": 10},
+    {"id": "CAB_WALL_W400_D370_H600", "family": "wall", "dimensions": [0.4, 0.37, 0.6], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_WALL_W400_D370_H800", "family": "wall", "dimensions": [0.4, 0.37, 0.8], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_WALL_W400_D370_H1000", "family": "wall", "dimensions": [0.4, 0.37, 1.0], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 11},
+    {"id": "CAB_WALL_W600_D370_H400", "family": "wall", "dimensions": [0.6, 0.37, 0.4], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_HORIZONTAL", "source_page": 11},
+    {"id": "CAB_WALL_W600_D370_H600", "family": "wall", "dimensions": [0.6, 0.37, 0.6], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_W600_D370_H800", "family": "wall", "dimensions": [0.6, 0.37, 0.8], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_W600_D370_H1000", "family": "wall", "dimensions": [0.6, 0.37, 1.0], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_W800_D370_H400", "family": "wall", "dimensions": [0.8, 0.37, 0.4], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_HORIZONTAL", "source_page": 11},
+    {"id": "CAB_WALL_W800_D370_H600", "family": "wall", "dimensions": [0.8, 0.37, 0.6], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_W800_D370_H800", "family": "wall", "dimensions": [0.8, 0.37, 0.8], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_W800_D370_H1000", "family": "wall", "dimensions": [0.8, 0.37, 1.0], "slot_profile_id": "WALL_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 11},
+    {"id": "CAB_WALL_CORNER_DIAGONAL_W680_D680_H600", "family": "wall", "variant": "corner_diagonal", "dimensions": [0.68, 0.68, 0.6], "slot_profile_id": "WALL_CORNER_DIAGONAL", "default_front_layout_id": "DOOR_DOUBLE", "corner_geometry": {"type": "diagonal", "wall_spans": [0.68, 0.68], "diagonal_front_width": 0.481}, "source_nominal_dimensions": [0.68, 0.68, 0.6], "source_page": 11},
+    {"id": "CAB_WALL_CORNER_DIAGONAL_W680_D680_H800", "family": "wall", "variant": "corner_diagonal", "dimensions": [0.68, 0.68, 0.8], "slot_profile_id": "WALL_CORNER_DIAGONAL", "default_front_layout_id": "DOOR_DOUBLE", "corner_geometry": {"type": "diagonal", "wall_spans": [0.68, 0.68], "diagonal_front_width": 0.481}, "source_nominal_dimensions": [0.68, 0.68, 0.8], "source_page": 11},
+    {"id": "CAB_WALL_CORNER_DIAGONAL_W680_D680_H1000", "family": "wall", "variant": "corner_diagonal", "dimensions": [0.68, 0.68, 1.0], "slot_profile_id": "WALL_CORNER_DIAGONAL", "default_front_layout_id": "DOOR_DOUBLE", "corner_geometry": {"type": "diagonal", "wall_spans": [0.68, 0.68], "diagonal_front_width": 0.481}, "source_nominal_dimensions": [0.68, 0.68, 1.0], "source_page": 11},
+
+    {"id": "CAB_WALL_HOOD_W600_D370_H600", "family": "wall", "variant": "built_in_hood", "dimensions": [0.6, 0.37, 0.6], "slot_profile_id": "WALL_HOOD_600", "source_page": 11},
+    {"id": "CAB_WALL_HOOD_W600_D370_H800", "family": "wall", "variant": "built_in_hood", "dimensions": [0.6, 0.37, 0.8], "slot_profile_id": "WALL_HOOD_600", "source_page": 11},
+    {"id": "CAB_WALL_HOOD_W600_D370_H1000", "family": "wall", "variant": "built_in_hood", "dimensions": [0.6, 0.37, 1.0], "slot_profile_id": "WALL_HOOD_600", "source_page": 11},
+    {"id": "CAB_WALL_HOOD_W800_D370_H600", "family": "wall", "variant": "built_in_hood", "dimensions": [0.8, 0.37, 0.6], "slot_profile_id": "WALL_HOOD_800", "source_page": 11},
+    {"id": "CAB_WALL_HOOD_W800_D370_H800", "family": "wall", "variant": "built_in_hood", "dimensions": [0.8, 0.37, 0.8], "slot_profile_id": "WALL_HOOD_800", "source_page": 11},
+    {"id": "CAB_WALL_HOOD_W800_D370_H1000", "family": "wall", "variant": "built_in_hood", "dimensions": [0.8, 0.37, 1.0], "slot_profile_id": "WALL_HOOD_800", "source_page": 11},
+
+    {"id": "CAB_HIGH_W400_D370_H2000", "family": "high", "dimensions": [0.4, 0.37, 2.0], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_SINGLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W400_D600_H2000", "family": "high", "dimensions": [0.4, 0.6, 2.0], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_SINGLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W400_D600_H2200", "family": "high", "dimensions": [0.4, 0.6, 2.2], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_SINGLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W600_D370_H2000", "family": "high", "dimensions": [0.6, 0.37, 2.0], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_DOUBLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W600_D600_H2000", "family": "high", "dimensions": [0.6, 0.6, 2.0], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_DOUBLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W600_D600_H2200", "family": "high", "dimensions": [0.6, 0.6, 2.2], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_DOUBLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_W800_D370_H2000", "family": "high", "dimensions": [0.8, 0.37, 2.0], "slot_profile_id": "HIGH_STANDARD", "default_front_layout_id": "DOOR_DOUBLE_VERTICAL_2", "source_page": 12},
+    {"id": "CAB_HIGH_BUILTIN_W600_D600_H1400", "family": "high", "variant": "built_in_fridge_or_oven", "dimensions": [0.6, 0.6, 1.4], "slot_profile_id": "HIGH_BUILTIN_1400", "default_configuration": "fridge", "source_page": 11},
+    {"id": "CAB_HIGH_BUILTIN_W600_D600_H2000", "family": "high", "variant": "built_in_fridge_or_oven_ventilated", "dimensions": [0.6, 0.6, 2.0], "slot_profile_id": "HIGH_BUILTIN_2000", "default_configuration": "fridge", "source_page": 11},
+    {"id": "CAB_HIGH_BUILTIN_W600_D600_H2200", "family": "high", "variant": "built_in_fridge_or_oven_ventilated", "dimensions": [0.6, 0.6, 2.2], "slot_profile_id": "HIGH_BUILTIN_2200", "default_configuration": "fridge", "source_page": 11},
+
+    {"id": "CAB_TOP_W400_D600_H400", "family": "top", "dimensions": [0.4, 0.6, 0.4], "slot_profile_id": "TOP_STANDARD", "default_front_layout_id": "DOOR_SINGLE", "source_page": 10},
+    {"id": "CAB_TOP_FRIDGE_W600_D600_H400", "family": "top", "variant": "above_fridge_freezer", "dimensions": [0.6, 0.6, 0.4], "slot_profile_id": "TOP_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10},
+    {"id": "CAB_TOP_FRIDGE_W600_D600_H600", "family": "top", "variant": "above_fridge_freezer", "dimensions": [0.6, 0.6, 0.6], "slot_profile_id": "TOP_STANDARD", "default_front_layout_id": "DOOR_DOUBLE", "source_page": 10}
+  ],
+  "asset_naming": {
+    "cabinet_model_path_template": "assets/cabinets/{cabinet_id}.glb",
+    "generated_node_names": ["carcass", "shelf", "front_zone", "appliance_slot", "worktop_anchor"]
+  }
+}

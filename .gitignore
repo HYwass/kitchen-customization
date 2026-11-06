@@ -1,0 +1,61 @@
+# Dependencies and build output
+/node_modules/
+/dist/
+
+# Runtime-generated AI artifacts
+/generation/runs/
+/generation/editor_sessions/
+/generation/reconstructions/
+
+# Dataset construction and collected data are not part of the application
+/dataset/
+/scripts/dataset/
+
+# Local research and asset-production material
+/tmp/
+/metod-cabinets-guide.pdf
+/想法.txt
+/cabinet_definition.json
+/AGENTS.md
+/EDITOR_README.md
+/scripts/generate_kitchen_assets.py
+/scripts/MODEL_GENERATOR_README.md
+/catalog/ASTRA_ASSET_GENERATION_RULES.md
+/generation/FUNCTIONALITY_EVALUATION.md
+/generation/IMAGE_RECONSTRUCTION_INTEGRATION.md
+/generation/image_reconstruction_request.template.md
+/generation/KITCHEN_STUDIO_APP.md
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.local
+.vscode/
+.idea/
+
+# Logs, caches, and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+.vite/
+.eslintcache
+coverage/
+
+# Python environments and caches used by auxiliary tooling
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+Desktop.ini

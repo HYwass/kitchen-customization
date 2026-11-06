@@ -1,0 +1,23 @@
+{
+  "name": "kitchen-customization-editor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "studio": "node scripts/start_kitchen_studio.mjs",
+    "studio:server": "node server/kitchen-studio-server.mjs",
+    "build": "vite build",
+    "preview": "vite preview",
+    "validate:scene": "node scripts/validate_kitchen_scene.mjs",
+    "render:scene": "node scripts/render_kitchen_scene.mjs",
+    "evaluate:functionality": "node scripts/evaluate_kitchen_functionality.mjs",
+    "compare:plans": "node scripts/compare_kitchen_plans.mjs"
+  },
+  "dependencies": {
+    "three": "0.186.0"
+  },
+  "devDependencies": {
+    "vite": "8.3.2"
+  }
+}

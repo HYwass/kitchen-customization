@@ -1,0 +1,182 @@
+{
+  "schemaVersion": "1.3.0",
+  "name": "2.4m Straight Kitchen Demo",
+  "units": "m",
+  "coordinateSystem": {
+    "x": "width",
+    "y": "depth",
+    "z": "height",
+    "front": "+Y",
+    "up": "+Z"
+  },
+  "room": {
+    "shape": "polygon",
+    "outline": [[-1.2, 0], [3.6, 0], [3.6, 3.6], [-1.2, 3.6]],
+    "floorElevation": 0,
+    "height": 2.7,
+    "wallThickness": 0.06,
+    "openings": [
+      {
+        "id": "door_01",
+        "type": "door",
+        "wallIndex": 1,
+        "centerOffset": 2.9,
+        "width": 0.8,
+        "bottomOffset": 0,
+        "height": 2.1,
+        "operation": "swing",
+        "hingeSide": "start",
+        "opensToward": "inward"
+      },
+      {
+        "id": "window_01",
+        "type": "window",
+        "wallIndex": 2,
+        "centerOffset": 2.4,
+        "width": 1.4,
+        "bottomOffset": 1.05,
+        "height": 1.2
+      }
+    ]
+  },
+  "worktop": {
+    "assetId": "WORKTOP_LAMINATE_WHITE_28",
+    "elevation": 0.88,
+    "regions": [
+      {
+        "id": "worktop_main",
+        "outline": [[0, 0], [2.4, 0], [2.4, 0.635], [0, 0.635]]
+      }
+    ]
+  },
+  "objects": [
+    {
+      "id": "cab_sink_01",
+      "name": "水槽柜",
+      "cabinetAssetId": "CAB_BASE_BUILTIN_W600_D600_H800__sink",
+      "position": [
+        0.3,
+        0.3,
+        0.08
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DOOR_DOUBLE",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [
+        "APPL_SINK_SINGLE_500_STEEL",
+        "APPL_FAUCET_U_CHROME"
+      ],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_drawer_01",
+      "name": "三抽屉柜",
+      "cabinetAssetId": "CAB_BASE_W600_D600_H800",
+      "position": [
+        0.9,
+        0.3,
+        0.08
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DRAWERS_3",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_oven_01",
+      "name": "烤箱灶台柜",
+      "cabinetAssetId": "CAB_BASE_BUILTIN_W600_D600_H800__oven",
+      "position": [
+        1.5,
+        0.3,
+        0.08
+      ],
+      "rotationZ": 0,
+      "frontAssetId": null,
+      "handleAssetId": null,
+      "applianceAssetIds": [
+        "APPL_OVEN_600_BLACK",
+        "APPL_COOKTOP_600_BLACK"
+      ],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_base_01",
+      "name": "双门地柜",
+      "cabinetAssetId": "CAB_BASE_W600_D600_H800",
+      "position": [
+        2.1,
+        0.3,
+        0.08
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DOOR_DOUBLE",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_wall_01",
+      "name": "左吊柜",
+      "cabinetAssetId": "CAB_WALL_W600_D370_H800",
+      "position": [
+        0.3,
+        0.185,
+        1.42
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DOOR_DOUBLE",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_wall_02",
+      "name": "中吊柜",
+      "cabinetAssetId": "CAB_WALL_W600_D370_H800",
+      "position": [
+        0.9,
+        0.185,
+        1.42
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DOOR_DOUBLE",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_hood_01",
+      "name": "油烟机吊柜",
+      "cabinetAssetId": "CAB_WALL_HOOD_W600_D370_H800",
+      "position": [
+        1.5,
+        0.185,
+        1.42
+      ],
+      "rotationZ": 0,
+      "frontAssetId": null,
+      "handleAssetId": null,
+      "applianceAssetIds": [
+        "APPL_HOOD_INSERT_600"
+      ],
+      "frontOpen": false
+    },
+    {
+      "id": "cab_wall_03",
+      "name": "右吊柜",
+      "cabinetAssetId": "CAB_WALL_W600_D370_H800",
+      "position": [
+        2.1,
+        0.185,
+        1.42
+      ],
+      "rotationZ": 0,
+      "frontAssetId": "FRONT_FLAT_MATTE_WHITE__DOOR_DOUBLE",
+      "handleAssetId": "HANDLE_BAR_160_BLACK",
+      "applianceAssetIds": [],
+      "frontOpen": false
+    }
+  ]
+}

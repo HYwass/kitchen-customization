@@ -1,0 +1,76 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_WORKTOPS",
+  "version": "1.0.0",
+  "units": "m",
+  "dimension_order": ["width_x", "depth_y", "height_z"],
+  "generation_policy": {
+    "mode": "procedural_run_mesh",
+    "model_format": "glb",
+    "origin": "run_start_back_left",
+    "axes": {"x": "along_run", "y": "back_to_front", "z": "up"},
+    "default_depth": 0.635,
+    "default_front_overhang": 0.025,
+    "default_side_overhang": 0.01,
+    "default_back_clearance": 0.0,
+    "merge_adjacent_base_cabinets_by_run_id": true,
+    "generated_asset_is_complete_slab": true,
+    "cutouts_are_generated_by_editor": true,
+    "supported_cutout_shapes": ["rectangle", "circle"]
+  },
+  "styles": [
+    {
+      "id": "WORKTOP_LAMINATE_WHITE_28",
+      "name": "White laminate 28 mm",
+      "thickness": 0.028,
+      "edge_profile": "square_softened",
+      "edge_radius": 0.002,
+      "material": {"base_color": "#F4F3EE", "roughness": 0.58, "metallic": 0.0},
+      "asset_path_template": "assets/worktops/WORKTOP_LAMINATE_WHITE_28/{run_id}.glb"
+    },
+    {
+      "id": "WORKTOP_LAMINATE_DARK_28",
+      "name": "Dark laminate 28 mm",
+      "thickness": 0.028,
+      "edge_profile": "square_softened",
+      "edge_radius": 0.002,
+      "material": {"base_color": "#292A2B", "roughness": 0.6, "metallic": 0.0},
+      "asset_path_template": "assets/worktops/WORKTOP_LAMINATE_DARK_28/{run_id}.glb"
+    },
+    {
+      "id": "WORKTOP_OAK_38",
+      "name": "Natural oak 38 mm",
+      "thickness": 0.038,
+      "edge_profile": "square_softened",
+      "edge_radius": 0.003,
+      "material": {"base_color": "#B88752", "roughness": 0.56, "metallic": 0.0, "texture_set": "oak_natural_along_run"},
+      "asset_path_template": "assets/worktops/WORKTOP_OAK_38/{run_id}.glb"
+    },
+    {
+      "id": "WORKTOP_QUARTZ_LIGHT_GREY_20",
+      "name": "Light grey quartz 20 mm",
+      "thickness": 0.02,
+      "edge_profile": "square_polished",
+      "edge_radius": 0.001,
+      "material": {"base_color": "#C9C8C3", "roughness": 0.34, "metallic": 0.0, "texture_set": "quartz_light_grey"},
+      "asset_path_template": "assets/worktops/WORKTOP_QUARTZ_LIGHT_GREY_20/{run_id}.glb"
+    },
+    {
+      "id": "WORKTOP_QUARTZ_BLACK_20",
+      "name": "Black quartz 20 mm",
+      "thickness": 0.02,
+      "edge_profile": "square_polished",
+      "edge_radius": 0.001,
+      "material": {"base_color": "#171819", "roughness": 0.3, "metallic": 0.0, "texture_set": "quartz_black_subtle"},
+      "asset_path_template": "assets/worktops/WORKTOP_QUARTZ_BLACK_20/{run_id}.glb"
+    },
+    {
+      "id": "WORKTOP_MARBLE_WHITE_20",
+      "name": "White marble 20 mm",
+      "thickness": 0.02,
+      "edge_profile": "square_polished",
+      "edge_radius": 0.001,
+      "material": {"base_color": "#E8E6E0", "roughness": 0.28, "metallic": 0.0, "texture_set": "white_marble_grey_vein"},
+      "asset_path_template": "assets/worktops/WORKTOP_MARBLE_WHITE_20/{run_id}.glb"
+    }
+  ]
+}

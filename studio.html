@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Kitchen Studio AI 多方案厨房设计" />
+    <title>Kitchen Studio · AI 方案设计</title>
+  </head>
+  <body>
+    <div class="studio-shell">
+      <header class="studio-topbar">
+        <a class="studio-brand" href="/studio.html">
+          <span class="studio-brand-mark">K</span>
+          <span><strong>Kitchen Studio</strong><small>AI 多方案厨房设计</small></span>
+        </a>
+        <div class="service-status" id="service-status"><span></span>正在检查生成服务</div>
+      </header>
+
+      <main class="studio-main">
+        <nav id="workflow-tabs" class="workflow-tabs" aria-label="AI 工作流">
+          <button id="design-mode-button" class="active" type="button">需求生成</button>
+          <button id="reconstruction-mode-button" type="button">图片重建</button>
+        </nav>
+        <section id="request-view" class="studio-view request-view">
+          <div class="hero-copy">
+            <span class="eyebrow">AI KITCHEN DESIGN</span>
+            <h1>从需求到三套可编辑的<br />厨房设计方案</h1>
+            <p>三套方案在同一个 AI 任务中依次生成；可选择完整迭代优化或更省时的快速生成。</p>
+          </div>
+
+          <form id="design-form" class="design-form">
+            <div class="form-heading">
+              <div><span class="step-number">01</span><h2>描述你的厨房</h2></div>
+              <p>边界使用逆时针排列的 XY 坐标，单位为米。</p>
+            </div>
+            <label>
+              <span>方案名称</span>
+              <input id="design-name" name="name" value="my_kitchen" autocomplete="off" />
+            </label>
+            <label>
+              <span>房间边界</span>
+              <textarea id="room-outline" rows="3">[[0,0],[4.8,0],[4.8,3.6],[0,3.6]]</textarea>
+            </label>
+            <label>
+              <span>门窗与固定条件</span>
+              <textarea id="openings" rows="4" placeholder="例如：南墙左侧有一扇 0.9 m 内开门；北墙中部有一扇窗，窗台高 1.15 m。水源位于北墙……"></textarea>
+            </label>
+            <div class="form-grid">
+              <label>
+                <span>布局偏好</span>
+                <select id="layout-preference">
+                  <option value="由系统根据房间选择合适布局">智能选择</option>
+                  <option value="优先一字型布局">一字型</option>
+                  <option value="优先双廊型布局">双廊型</option>
+                  <option value="优先 L 型布局">L 型</option>
+                  <option value="优先 U 型布局">U 型</option>
+                </select>
+              </label>
+              <label>
+                <span>门板风格</span>
+                <select id="style-preference">
+                  <option value="由系统选择协调的风格">智能搭配</option>
+                  <option value="白色平板门">白色平板</option>
+                  <option value="灰色平板门">灰色平板</option>
+                  <option value="橡木平板门">橡木平板</option>
+                  <option value="白色 Shaker 门板">白色 Shaker</option>
+                  <option value="深绿色 Shaker 门板">深绿 Shaker</option>
+                  <option value="胡桃木纹理门板">胡桃木纹理</option>
+                </select>
+              </label>
+            </div>
+            <label>
+              <span>其他需求</span>
+              <textarea id="extra-requirements" rows="5" placeholder="例如：必须有独立冰箱和洗碗机；希望储物空间充足；不要在窗前放吊柜。"></textarea>
+            </label>
+            <label class="refine-option">
+              <input id="full-refine" type="checkbox" checked />
+              <span><strong>执行完整 refine</strong><small>每套方案都会核验、渲染、看图并按反馈迭代；关闭后只生成和检查一次，可节省时间与 Token。</small></span>
+            </label>
+            <button class="studio-button primary submit-design" type="submit">
+              <span>生成三套方案</span><span aria-hidden="true">→</span>
+            </button>
+          </form>
+        </section>
+
+        <section id="reconstruction-request-view" class="studio-view request-view hidden">
+          <div class="hero-copy">
+            <span class="eyebrow">MULTI-VIEW RECONSTRUCTION</span>
+            <h1>从多视角照片还原<br />可编辑厨房场景</h1>
+            <p>上传同一个厨房的任意张照片。AI 会统一识别房间、门窗、柜体和电器，并从现有组件库中完成一次重建。</p>
+          </div>
+
+          <form id="reconstruction-form" class="design-form">
+            <div class="form-heading">
+              <div><span class="step-number">01</span><h2>上传厨房照片</h2></div>
+              <p>尽量覆盖不同墙面，并保留能够关联视角的共同物件。</p>
+            </div>
+            <label>
+              <span>场景名称</span>
+              <input id="reconstruction-name" value="multiview_kitchen" autocomplete="off" />
+            </label>
+            <label class="image-upload-field">
+              <span>多视角图片</span>
+              <input id="reconstruction-images" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple />
+              <span class="image-upload-prompt"><strong>选择图片</strong><small>支持 JPG、PNG、WebP，可一次选择多张</small></span>
+            </label>
+            <div id="reconstruction-preview" class="reconstruction-preview"><p>尚未选择图片</p></div>
+            <label>
+              <span>尺寸与场景补充说明（可选）</span>
+              <textarea id="reconstruction-notes" rows="6" placeholder="例如：房间约 3.8 × 3.2 m；窗台高约 1.1 m；所有照片属于同一个厨房。没有实测信息可以留空。"></textarea>
+            </label>
+            <p class="single-pass-note">图片重建只执行一次，不进行自动渲染或 refine。完成后可直接进入编辑器检查和修改。</p>
+            <button class="studio-button primary submit-design" type="submit">
+              <span>开始场景重建</span><span aria-hidden="true">→</span>
+            </button>
+          </form>
+        </section>
+
+        <section id="progress-view" class="studio-view progress-view hidden">
+          <div class="progress-hero">
+            <span class="eyebrow">GENERATING</span>
+            <h1>正在完成三套厨房方案</h1>
+            <p id="progress-stage">正在连接生成服务…</p>
+          </div>
+          <div class="profile-progress-grid" id="profile-progress"></div>
+          <div class="activity-card">
+            <div class="activity-heading"><h2>生成记录</h2><span id="run-id-label"></span></div>
+            <div id="activity-log" class="activity-log"></div>
+          </div>
+        </section>
+
+        <section id="comparison-view" class="studio-view comparison-view hidden">
+          <div class="comparison-heading">
+            <div><span class="eyebrow">COMPARE PLANS</span><h1>选择最适合你的方案</h1></div>
+            <button id="new-design-button" class="studio-button secondary" type="button">重新设计</button>
+          </div>
+          <div id="plan-grid" class="plan-grid"></div>
+          <p class="evaluation-note">评价结果用于概念方案比较，不代替施工、安全或法规审核。</p>
+        </section>
+
+        <section id="reconstruction-progress-view" class="studio-view progress-view hidden">
+          <div class="progress-hero">
+            <span class="eyebrow">RECONSTRUCTING</span>
+            <h1>正在重建厨房场景</h1>
+            <p id="reconstruction-progress-stage">正在上传图片…</p>
+          </div>
+          <div class="reconstruction-process-card">
+            <span>单次重建</span><strong id="reconstruction-image-count">0 张图片</strong><small>查看全部视角 → 统一空间关系 → 匹配组件库 → 输出场景 JSON</small>
+          </div>
+          <div class="activity-card">
+            <div class="activity-heading"><h2>重建记录</h2><span id="reconstruction-id-label"></span></div>
+            <div id="reconstruction-activity-log" class="activity-log"></div>
+          </div>
+        </section>
+
+        <section id="reconstruction-result-view" class="studio-view reconstruction-result-view hidden">
+          <div class="reconstruction-result-card">
+            <span class="result-mark">✓</span>
+            <span class="eyebrow">RECONSTRUCTION COMPLETE</span>
+            <h1>场景重建已完成</h1>
+            <p>重建结果已经转换为 Kitchen Studio 场景 JSON。现在可以进入编辑器查看、调整组件并导出最终结果。</p>
+            <div class="reconstruction-result-actions">
+              <a id="reconstruction-open-editor" class="studio-button primary" href="/">进入编辑器</a>
+              <a id="reconstruction-download-json" class="studio-button secondary" href="#" download>下载场景 JSON</a>
+              <button id="new-reconstruction-button" class="studio-button secondary" type="button">重建另一个场景</button>
+            </div>
+          </div>
+        </section>
+      </main>
+      <div id="studio-toast" class="studio-toast" role="status"></div>
+    </div>
+    <script type="module" src="/src/studio.js"></script>
+  </body>
+</html>

@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="KITCHEN_CATALOG_V1 interactive kitchen editor demo"
+    />
+    <title>Kitchen Studio · Demo Editor</title>
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <header class="topbar">
+        <div class="brand-block">
+          <div class="brand-mark" aria-hidden="true">K</div>
+          <div>
+            <h1>Kitchen Studio</h1>
+            <p>KITCHEN_CATALOG_V1 · Demo Editor</p>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <a class="button ghost studio-link" href="/studio.html">AI 方案设计</a>
+          <button id="toggle-left-panel" class="button ghost panel-toggle-button" type="button" aria-expanded="true" aria-controls="left-panel" title="隐藏组件栏">◀ 组件栏</button>
+          <button id="toggle-right-panel" class="button ghost panel-toggle-button" type="button" aria-expanded="true" aria-controls="right-panel" title="隐藏对象编辑栏">对象栏 ▶</button>
+          <button id="reset-button" class="button ghost" type="button">重置场景</button>
+          <button id="load-button" class="button ghost" type="button">载入 JSON</button>
+          <button id="save-button" class="button primary" type="button">保存 JSON</button>
+          <button id="drawing-button" class="button drawing-button" type="button">导出图纸</button>
+          <input id="load-input" type="file" accept="application/json,.json" hidden />
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside id="left-panel" class="panel panel-left">
+          <section class="panel-section intro-card">
+            <span class="eyebrow">DEMO SCENE</span>
+            <h2 id="scene-name">2.4 m 直线厨房</h2>
+            <p>选择资产添加到场景；点击模型后可移动、旋转和替换组件。</p>
+            <div class="scene-stats">
+              <span><strong id="object-count">0</strong> 个柜体</span>
+              <span><strong>18</strong> 个资产</span>
+            </div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">CATALOG</span>
+                <h3>添加柜体</h3>
+              </div>
+            </div>
+            <div id="asset-library" class="asset-library"></div>
+          </section>
+
+          <section class="panel-section">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">WORKTOP</span>
+                <h3>台面风格</h3>
+              </div>
+            </div>
+            <label class="field-label" for="worktop-style-select">当前材质</label>
+            <select id="worktop-style-select" class="select-control"></select>
+          </section>
+
+          <section class="panel-section outliner-section">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">SCENE</span>
+                <h3>场景层级</h3>
+              </div>
+            </div>
+            <div id="scene-tree" class="scene-tree"></div>
+          </section>
+        </aside>
+
+        <section class="viewport-shell">
+          <div id="viewport" class="viewport" aria-label="3D kitchen editor"></div>
+          <div class="viewport-toolbar" role="toolbar" aria-label="Transform tools">
+            <button id="select-tool" class="tool-button active" type="button" title="选择 (Q)">↖</button>
+            <button id="move-tool" class="tool-button" type="button" title="移动 (W)">✥</button>
+            <button id="rotate-tool" class="tool-button" type="button" title="旋转 (E)">↻</button>
+            <span class="toolbar-divider"></span>
+            <button id="open-tool" class="tool-button open-toggle" type="button" title="打开柜门或抽屉 (O)" disabled>OPEN</button>
+            <span class="toolbar-divider"></span>
+            <button id="focus-tool" class="tool-button" type="button" title="聚焦选中 (F)">◎</button>
+            <button id="delete-tool" class="tool-button danger" type="button" title="删除选中 (Delete)">⌫</button>
+          </div>
+
+          <div class="view-hint">
+            <span><kbd>左键点击</kbd> 选择</span>
+            <span><kbd>左键拖动</kbd> 旋转视角</span>
+            <span><kbd>中键拖动</kbd> 平移视角</span>
+            <span><kbd>滚轮</kbd> 缩放</span>
+            <span><kbd>W / E</kbd> 移动 / 旋转</span>
+          </div>
+
+          <div id="loading-overlay" class="loading-overlay hidden">
+            <div class="loading-spinner"></div>
+            <p id="loading-text">正在载入厨房资产…</p>
+          </div>
+        </section>
+
+        <aside id="right-panel" class="panel panel-right">
+          <div class="panel-section inspector-header">
+            <span class="eyebrow">INSPECTOR</span>
+            <h2 id="inspector-title">未选择对象</h2>
+            <p id="inspector-subtitle">点击场景中的柜体开始编辑。</p>
+          </div>
+          <div id="inspector-content" class="inspector-content empty-inspector">
+            <div class="empty-icon">◇</div>
+            <p>可以修改位置、朝向、柜体、门板、拉手和电器。</p>
+          </div>
+          <section id="ai-refine-panel" class="ai-refine-panel">
+            <div class="ai-refine-heading">
+              <div><span class="eyebrow">AI REFINE</span><h3>对话修改方案</h3></div>
+              <span class="ai-status-dot" id="ai-status-dot" title="本地生成服务"></span>
+            </div>
+            <div id="ai-conversation" class="ai-conversation">
+              <div class="ai-message assistant">描述希望如何调整当前厨房。未提到的正确部分会尽量保持不变。</div>
+            </div>
+            <form id="ai-refine-form" class="ai-refine-form">
+              <textarea id="ai-refine-input" rows="4" placeholder="例如：保留水槽位置，把冰箱移到门的另一边，并增加一台洗碗机。"></textarea>
+              <button id="ai-refine-submit" class="button primary" type="submit">生成修改</button>
+            </form>
+            <div id="ai-preview-actions" class="ai-preview-actions" hidden>
+              <p>候选方案已在编辑器中预览。</p>
+              <button id="ai-discard-button" class="button inspector-button" type="button">撤销预览</button>
+              <button id="ai-accept-button" class="button primary" type="button">接受修改</button>
+            </div>
+          </section>
+        </aside>
+      </main>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    </div>
+    <script type="module">
+      import("/src/main.js").catch((error) => {
+        console.error("编辑器主模块启动失败", error);
+        const overlay = document.querySelector("#loading-overlay");
+        const spinner = overlay?.querySelector(".loading-spinner");
+        const message = document.querySelector("#loading-text");
+        spinner?.remove();
+        if (message) message.textContent = `编辑器启动失败：${error?.message || error}`;
+        overlay?.classList.remove("hidden");
+      });
+    </script>
+  </body>
+</html>

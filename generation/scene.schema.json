@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "kitchen-scene-1.3.0",
+  "title": "Kitchen Studio scene",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "name",
+    "units",
+    "coordinateSystem",
+    "room",
+    "worktop",
+    "objects"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.3.0"},
+    "name": {"type": "string", "minLength": 1},
+    "units": {"const": "m"},
+    "coordinateSystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "z", "front", "up"],
+      "properties": {
+        "x": {"const": "width"},
+        "y": {"const": "depth"},
+        "z": {"const": "height"},
+        "front": {"const": "+Y"},
+        "up": {"const": "+Z"}
+      }
+    },
+    "room": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shape", "outline", "floorElevation", "height", "wallThickness", "openings"],
+      "properties": {
+        "shape": {"const": "polygon"},
+        "outline": {
+          "type": "array",
+          "minItems": 4,
+          "items": {"$ref": "#/$defs/vector2"}
+        },
+        "floorElevation": {"type": "number"},
+        "height": {"type": "number", "exclusiveMinimum": 0},
+        "wallThickness": {"type": "number", "minimum": 0},
+        "openings": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/roomOpening"}
+        }
+      }
+    },
+    "worktop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["assetId", "elevation", "regions"],
+      "properties": {
+        "assetId": {"type": "string", "minLength": 1},
+        "elevation": {"type": "number", "minimum": 0},
+        "regions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/worktopRegion"}
+        }
+      }
+    },
+    "objects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {"$ref": "#/$defs/cabinetObject"},
+          {"$ref": "#/$defs/standaloneObject"}
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "vector2": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "vector3": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number"},
+        {"type": "number"},
+        {"type": "number"}
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "cardinalYaw": {
+      "type": "number",
+      "enum": [0, 1.5707963268, 3.1415926536, -1.5707963268]
+    },
+    "nullableAssetId": {
+      "oneOf": [
+        {"type": "string", "minLength": 1},
+        {"type": "null"}
+      ]
+    },
+    "roomOpening": {
+      "oneOf": [
+        {"$ref": "#/$defs/doorOpening"},
+        {"$ref": "#/$defs/windowOpening"}
+      ]
+    },
+    "openingBase": {
+      "type": "object",
+      "required": ["id", "type", "wallIndex", "centerOffset", "width", "bottomOffset", "height"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+        "type": {"enum": ["door", "window"]},
+        "wallIndex": {"type": "integer", "minimum": 0},
+        "centerOffset": {"type": "number", "exclusiveMinimum": 0},
+        "width": {"type": "number", "exclusiveMinimum": 0},
+        "bottomOffset": {"type": "number", "minimum": 0},
+        "height": {"type": "number", "exclusiveMinimum": 0}
+      }
+    },
+    "doorOpening": {
+      "allOf": [
+        {"$ref": "#/$defs/openingBase"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "wallIndex", "centerOffset", "width", "bottomOffset", "height", "operation", "hingeSide", "opensToward"],
+          "properties": {
+            "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+            "type": {"const": "door"},
+            "wallIndex": {"type": "integer", "minimum": 0},
+            "centerOffset": {"type": "number", "exclusiveMinimum": 0},
+            "width": {"type": "number", "exclusiveMinimum": 0},
+            "bottomOffset": {"const": 0},
+            "height": {"type": "number", "exclusiveMinimum": 0},
+            "operation": {"enum": ["swing", "sliding", "opening"]},
+            "hingeSide": {"enum": ["start", "end", "none"]},
+            "opensToward": {"enum": ["inward", "outward", "none"]}
+          }
+        }
+      ]
+    },
+    "windowOpening": {
+      "allOf": [
+        {"$ref": "#/$defs/openingBase"},
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "type", "wallIndex", "centerOffset", "width", "bottomOffset", "height"],
+          "properties": {
+            "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+            "type": {"const": "window"},
+            "wallIndex": {"type": "integer", "minimum": 0},
+            "centerOffset": {"type": "number", "exclusiveMinimum": 0},
+            "width": {"type": "number", "exclusiveMinimum": 0},
+            "bottomOffset": {"type": "number", "exclusiveMinimum": 0},
+            "height": {"type": "number", "exclusiveMinimum": 0}
+          }
+        }
+      ]
+    },
+    "worktopRegion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "outline"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$"},
+        "outline": {
+          "type": "array",
+          "minItems": 3,
+          "items": {"$ref": "#/$defs/vector2"}
+        }
+      }
+    },
+    "cabinetObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "cabinetAssetId",
+        "position",
+        "rotationZ",
+        "frontOpen",
+        "frontAssetId",
+        "handleAssetId",
+        "applianceAssetIds"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^cab_[A-Za-z0-9_-]+$"},
+        "name": {"type": "string", "minLength": 1},
+        "cabinetAssetId": {"type": "string", "minLength": 1},
+        "position": {"$ref": "#/$defs/vector3"},
+        "rotationZ": {"$ref": "#/$defs/cardinalYaw"},
+        "frontOpen": {"const": false},
+        "frontAssetId": {"$ref": "#/$defs/nullableAssetId"},
+        "handleAssetId": {"$ref": "#/$defs/nullableAssetId"},
+        "applianceAssetIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "standaloneObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "assetKind", "assetId", "position", "rotationZ"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^obj_[A-Za-z0-9_-]+$"},
+        "name": {"type": "string", "minLength": 1},
+        "assetKind": {"enum": ["appliance", "furniture"]},
+        "assetId": {"type": "string", "minLength": 1},
+        "position": {"$ref": "#/$defs/vector3"},
+        "rotationZ": {"$ref": "#/$defs/cardinalYaw"}
+      }
+    }
+  }
+}
