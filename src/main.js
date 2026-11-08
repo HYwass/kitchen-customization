@@ -16,6 +16,7 @@ import {
 import { cloneDemoScene } from "./demo-scene.js";
 import { automatedViewDirection } from "./render-view.js";
 import { exportKitchenDrawings } from "./drawing-export.js";
+import { estimateKitchenPrice } from "./pricing.js";
 import "./styles.css";
 
 THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
@@ -72,6 +73,13 @@ const dom = {
   loadInput: document.querySelector("#load-input"),
   saveButton: document.querySelector("#save-button"),
   drawingButton: document.querySelector("#drawing-button"),
+  priceWidget: document.querySelector("#price-widget"),
+  priceButton: document.querySelector("#price-button"),
+  priceTotal: document.querySelector("#price-total"),
+  pricePopover: document.querySelector("#price-popover"),
+  pricePopoverTotal: document.querySelector("#price-popover-total"),
+  priceBreakdown: document.querySelector("#price-breakdown"),
+  priceDisclaimer: document.querySelector("#price-disclaimer"),
   selectTool: document.querySelector("#select-tool"),
   moveTool: document.querySelector("#move-tool"),
   rotateTool: document.querySelector("#rotate-tool"),
@@ -725,6 +733,16 @@ function setupEvents() {
   dom.resetButton.addEventListener("click", resetScene);
   dom.saveButton.addEventListener("click", saveSceneJson);
   dom.drawingButton.addEventListener("click", exportCurrentDrawings);
+  dom.priceButton.addEventListener("click", () => {
+    const expanded = dom.priceButton.getAttribute("aria-expanded") === "true";
+    dom.priceButton.setAttribute("aria-expanded", String(!expanded));
+    dom.pricePopover.hidden = expanded;
+  });
+  document.addEventListener("pointerdown", (event) => {
+    if (dom.pricePopover.hidden || dom.priceWidget.contains(event.target)) return;
+    dom.pricePopover.hidden = true;
+    dom.priceButton.setAttribute("aria-expanded", "false");
+  });
   dom.loadButton.addEventListener("click", () => dom.loadInput.click());
   dom.loadInput.addEventListener("change", loadSceneJson);
   dom.aiRefineForm.addEventListener("submit", submitAiRefinement);
@@ -1422,6 +1440,7 @@ async function rebuildEntireScene() {
   refreshSceneTree();
   dom.sceneName.textContent = sceneState.name;
   dom.worktopStyle.value = sceneState.worktop.assetId;
+  updatePriceSummary();
 }
 
 function rebuildWorktop() {
@@ -1455,6 +1474,54 @@ function rebuildWorktop() {
   }
 
   rebuildProceduralFinishes();
+  updatePriceSummary();
+}
+
+function proceduralFinishMetrics() {
+  const metrics = { backsplashArea: 0, endPanelArea: 0, fillerPanelArea: 0 };
+  finishRoot.traverse((object) => {
+    if (!object.isMesh || !object.geometry?.parameters) return;
+    const { width = 0, depth = 0 } = object.geometry.parameters;
+    if (object.name.startsWith("backsplash_")) metrics.backsplashArea += width * depth;
+    else if (object.name.startsWith("end_panel_")) metrics.endPanelArea += object.geometry.parameters.height * depth;
+    else if (object.name.startsWith("filler_")) metrics.fillerPanelArea += width * depth;
+  });
+  return metrics;
+}
+
+function formatEstimatedPrice(value) {
+  return new Intl.NumberFormat("zh-CN", {
+    style: "currency",
+    currency: "CNY",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function updatePriceSummary() {
+  const estimate = estimateKitchenPrice(sceneState, {
+    cabinets: CABINET_ASSETS,
+    fronts: FRONT_ASSETS,
+    appliances: APPLIANCE_ASSETS,
+    furniture: FURNITURE_ASSETS,
+  }, proceduralFinishMetrics());
+  const format = formatEstimatedPrice;
+  dom.priceTotal.textContent = format(estimate.total);
+  dom.pricePopoverTotal.textContent = format(estimate.total);
+  dom.priceBreakdown.innerHTML = `
+    <div class="price-group">
+      <span>厨房家具</span><strong>${format(estimate.groups.furniture)}</strong>
+      <small>柜体 ${format(estimate.detail.cabinet)} · 门板 ${format(estimate.detail.front)} · 拉手 ${format(estimate.detail.handle)} · 桌椅 ${format(estimate.detail.furniture)}</small>
+    </div>
+    <div class="price-group">
+      <span>台面与饰面</span><strong>${format(estimate.groups.surfaces)}</strong>
+      <small>台面及开孔 ${format(estimate.detail.worktop)} · 墙面砖 ${format(estimate.detail.backsplash)} · 侧板与填缝板 ${format(estimate.detail.panel)}</small>
+    </div>
+    <div class="price-group">
+      <span>厨房电器</span><strong>${format(estimate.groups.appliances)}</strong>
+      <small>嵌入式及独立式电器、水槽与龙头</small>
+    </div>
+  `;
+  dom.priceDisclaimer.textContent = estimate.disclaimer;
 }
 
 function rebuildProceduralFinishes() {
@@ -2051,6 +2118,7 @@ async function rebuildItem(id) {
     showToast(error.message, true);
   }
   refreshSceneTree();
+  updatePriceSummary();
 }
 
 async function rebuildItemsWithWorktopAppliances() {

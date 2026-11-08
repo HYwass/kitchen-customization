@@ -1,0 +1,97 @@
+{
+  "catalog_id": "KITCHEN_CATALOG_V1_PRICING",
+  "version": "1.0.0",
+  "currency": "CNY",
+  "currency_symbol": "¥",
+  "price_basis": "Approximate non-promotional retail prices for a student demonstration, referenced against comparable IKEA China kitchen products in November 2026. Not a retailer quotation.",
+  "cabinet": {
+    "family_base_price": {
+      "base": 160,
+      "wall": 100,
+      "high": 180,
+      "top": 150
+    },
+    "width_rate": {
+      "base": 130,
+      "wall": 130,
+      "high": 400,
+      "top": 200
+    },
+    "height_rate": {
+      "base": 0,
+      "wall": 40,
+      "high": 55,
+      "top": 20
+    },
+    "corner_base_price": 410,
+    "builtin_premium": 80,
+    "carrier_only_price": 180,
+    "door_fitting_per_panel": 90,
+    "drawer_fitting_per_drawer": 260,
+    "tall_storage_fitting": 160
+  },
+  "front": {
+    "minimum_per_panel": 90,
+    "price_per_square_metre": {
+      "FRONT_FLAT_MATTE_WHITE": 720,
+      "FRONT_FLAT_MATTE_GREY": 760,
+      "FRONT_FLAT_OAK": 1050,
+      "FRONT_SHAKER_WHITE": 980,
+      "FRONT_SHAKER_DARK_GREEN": 1080,
+      "FRONT_RIBBED_WALNUT": 1450
+    },
+    "mixed_layout_coverage": {
+      "APPLIANCE_OVEN_WITH_BOTTOM_PANEL": 0.25,
+      "APPLIANCE_OVEN_WITH_SIDE_FILLERS": 0.25,
+      "TALL_OVEN_MIDDLE": 0.7,
+      "TALL_FRIDGE_1220": 1.0,
+      "TALL_FRIDGE_1770": 1.0,
+      "TALL_FRIDGE_1770_WITH_TOP_STORAGE": 1.0
+    }
+  },
+  "handle_unit_price": {
+    "HANDLE_BAR_160_BLACK": 35,
+    "HANDLE_BAR_320_STEEL": 55,
+    "HANDLE_KNOB_ROUND_BLACK": 25,
+    "HANDLE_KNOB_ROUND_BRASS": 32,
+    "HANDLE_CUP_96_BRASS": 48,
+    "HANDLE_EDGE_200_BLACK": 45
+  },
+  "furniture_unit_price": {
+    "FURN_TABLE_DINING_1400_OAK": 1499,
+    "FURN_TABLE_ROUND_1000_OAK": 999,
+    "FURN_CHAIR_DINING_OAK": 399,
+    "FURN_STOOL_COUNTER_BLACK": 299
+  },
+  "appliance_unit_price": {
+    "APPL_OVEN_600_BLACK": 2499,
+    "APPL_DISHWASHER_600_INTEGRATED": 2799,
+    "APPL_FRIDGE_INTEGRATED_1220": 3499,
+    "APPL_FRIDGE_INTEGRATED_1770": 4999,
+    "APPL_HOOD_INSERT_600": 1999,
+    "APPL_HOOD_INSERT_800": 2499,
+    "APPL_SINK_SINGLE_500_STEEL": 599,
+    "APPL_SINK_SINGLE_700_STEEL": 799,
+    "APPL_COOKTOP_600_BLACK": 2999,
+    "APPL_COOKTOP_800_BLACK": 3999,
+    "APPL_FAUCET_U_CHROME": 499,
+    "APPL_FAUCET_U_BLACK": 699,
+    "APPL_FRIDGE_FREESTANDING_600_STEEL": 3999,
+    "APPL_HOOD_CHIMNEY_600_STEEL": 2499
+  },
+  "surface": {
+    "worktop_price_per_square_metre": {
+      "WORKTOP_LAMINATE_WHITE_28": 550,
+      "WORKTOP_LAMINATE_DARK_28": 580,
+      "WORKTOP_OAK_38": 950,
+      "WORKTOP_QUARTZ_LIGHT_GREY_20": 1650,
+      "WORKTOP_QUARTZ_BLACK_20": 1750,
+      "WORKTOP_MARBLE_WHITE_20": 1950
+    },
+    "minimum_worktop_price": 290,
+    "cutout_each": 150,
+    "backsplash_tile_per_square_metre": 280,
+    "end_panel_per_square_metre": 420,
+    "filler_panel_per_square_metre": 360
+  }
+}

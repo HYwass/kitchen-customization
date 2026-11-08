@@ -22,6 +22,23 @@
 
         <div class="topbar-actions">
           <a class="button ghost studio-link" href="/studio.html">AI 方案设计</a>
+          <div id="price-widget" class="price-widget">
+            <button id="price-button" class="price-button" type="button" aria-expanded="false" aria-controls="price-popover">
+              <span>方案估价</span>
+              <strong id="price-total">¥0</strong>
+            </button>
+            <div id="price-popover" class="price-popover" hidden>
+              <div class="price-popover-heading">
+                <div>
+                  <span class="eyebrow">PRICE ESTIMATE</span>
+                  <h2>当前方案费用</h2>
+                </div>
+                <strong id="price-popover-total">¥0</strong>
+              </div>
+              <div id="price-breakdown" class="price-breakdown"></div>
+              <p id="price-disclaimer" class="price-disclaimer"></p>
+            </div>
+          </div>
           <button id="toggle-left-panel" class="button ghost panel-toggle-button" type="button" aria-expanded="true" aria-controls="left-panel" title="隐藏组件栏">◀ 组件栏</button>
           <button id="toggle-right-panel" class="button ghost panel-toggle-button" type="button" aria-expanded="true" aria-controls="right-panel" title="隐藏对象编辑栏">对象栏 ▶</button>
           <button id="reset-button" class="button ghost" type="button">重置场景</button>

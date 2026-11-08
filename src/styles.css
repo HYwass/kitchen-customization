@@ -115,7 +115,128 @@ button {
 
 .topbar-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
+}
+
+.price-widget {
+  position: relative;
+}
+
+.price-button {
+  display: grid;
+  min-width: 112px;
+  height: 42px;
+  padding: 5px 13px;
+  text-align: left;
+  color: #fff7e8;
+  background: rgba(213, 158, 62, 0.14);
+  border: 1px solid rgba(236, 190, 108, 0.42);
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+.price-button span {
+  color: #c9c5b9;
+  font-size: 9px;
+  letter-spacing: 0.06em;
+}
+
+.price-button strong {
+  font-size: 15px;
+  line-height: 17px;
+}
+
+.price-button:hover,
+.price-button[aria-expanded="true"] {
+  background: rgba(213, 158, 62, 0.24);
+}
+
+.price-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  z-index: 60;
+  width: 340px;
+  padding: 18px;
+  color: var(--ink);
+  background: rgba(251, 250, 247, 0.98);
+  border: 1px solid #d8d3c8;
+  border-radius: 12px;
+  box-shadow: 0 20px 55px rgba(31, 31, 27, 0.24);
+}
+
+.price-popover[hidden] {
+  display: none;
+}
+
+.price-popover::before {
+  position: absolute;
+  top: -7px;
+  right: 45px;
+  width: 12px;
+  height: 12px;
+  content: "";
+  background: #fbfaf7;
+  border-top: 1px solid #d8d3c8;
+  border-left: 1px solid #d8d3c8;
+  transform: rotate(45deg);
+}
+
+.price-popover-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  padding-bottom: 13px;
+  border-bottom: 1px solid var(--line);
+}
+
+.price-popover-heading h2 {
+  margin: 3px 0 0;
+  font-size: 16px;
+}
+
+.price-popover-heading > strong {
+  color: var(--green);
+  font-size: 22px;
+}
+
+.price-breakdown {
+  display: grid;
+  gap: 12px;
+  padding: 14px 0;
+}
+
+.price-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3px 12px;
+}
+
+.price-group > span {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.price-group > strong {
+  color: var(--green);
+  font-size: 13px;
+}
+
+.price-group > small {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.price-disclaimer {
+  margin: 0;
+  padding-top: 11px;
+  color: #858178;
+  border-top: 1px solid var(--line);
+  font-size: 9px;
+  line-height: 1.55;
 }
 
 .button {

@@ -118,12 +118,23 @@ function createFrontAsset(style, layout) {
     .replace("{layout_id}", horizontalPanelLayout.id)
     .replace("{width_mm}", String(Math.round(horizontalPanelLayout.template_size[0] * 1000)))
     .replace("{height_mm}", String(Math.round(horizontalPanelLayout.template_size[1] * 1000)));
+  const panelCount = layout.kind === "mixed"
+    ? Math.max(1, layout.zones?.filter((zone) => !zone.includes("oven_600")).length ?? 1)
+    : (layout.rows ?? 1) * (layout.columns ?? 1);
+  const handleCount = {
+    none: 0,
+    single_door: 1,
+    single_door_each_storage_zone: 2,
+    single_door_each_zone: layout.zones?.length ?? 1,
+  }[layout.handle_group] ?? panelCount;
   return {
     id: `${style.id}__${layout.id}`,
     label: `${style.name} · ${humanizeId(layout.id)}`,
     styleId: style.id,
     layoutId: layout.id,
     layoutKind: layout.kind,
+    panelCount,
+    handleCount,
     templateSize: panelLayout.template_size,
     zones: layout.zones ?? null,
     material: style.material,
