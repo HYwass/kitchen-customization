@@ -1,4 +1,8 @@
 import "./studio.css";
+import "./language-switcher.css";
+import { createRoomOutlineEditor } from "./room-outline-editor.js";
+import { installTokenUsageWidget } from "./token-usage.js";
+import { installLanguageSwitcher } from "./i18n.js";
 
 const PROFILES = [
   { id: "function_rich", label: "功能丰富", icon: "◆", summary: "更完整的电器、储物和操作功能" },
@@ -6,8 +10,11 @@ const PROFILES = [
   { id: "spacious", label: "宽敞通透", icon: "◇", summary: "完整基础功能与更大的活动空间" },
 ];
 
+installLanguageSwitcher();
+
 const dom = {
   serviceStatus: document.querySelector("#service-status"),
+  aiProvider: document.querySelector("#ai-provider"),
   workflowTabs: document.querySelector("#workflow-tabs"),
   designMode: document.querySelector("#design-mode-button"),
   reconstructionMode: document.querySelector("#reconstruction-mode-button"),
@@ -20,6 +27,22 @@ const dom = {
   form: document.querySelector("#design-form"),
   name: document.querySelector("#design-name"),
   roomOutline: document.querySelector("#room-outline"),
+  roomOutlineCanvas: document.querySelector("#room-outline-canvas"),
+  roomOutlineStatus: document.querySelector("#room-outline-status"),
+  roomOutlineSummary: document.querySelector("#room-outline-summary"),
+  roomOutlineCoordinateOutput: document.querySelector("#room-outline-coordinate-output"),
+  floorplanImage: document.querySelector("#floorplan-image"),
+  floorplanUploadLabel: document.querySelector("#floorplan-upload-label"),
+  floorplanPreview: document.querySelector("#floorplan-preview"),
+  recognizeFloorplan: document.querySelector("#recognize-floorplan"),
+  floorplanRecognitionStatus: document.querySelector("#floorplan-recognition-status"),
+  floorplanRecognitionResult: document.querySelector("#floorplan-recognition-result"),
+  outlineTemplateRectangle: document.querySelector("#outline-template-rectangle"),
+  outlineTemplateL: document.querySelector("#outline-template-l"),
+  outlineTemplateU: document.querySelector("#outline-template-u"),
+  outlineDraw: document.querySelector("#outline-draw"),
+  outlineUndo: document.querySelector("#outline-undo"),
+  outlineClose: document.querySelector("#outline-close"),
   openings: document.querySelector("#openings"),
   layout: document.querySelector("#layout-preference"),
   style: document.querySelector("#style-preference"),
@@ -47,10 +70,16 @@ const dom = {
 };
 
 const initialParameters = new URLSearchParams(window.location.search);
+const providerStorageKey = "kitchen-ai-provider";
+const requestedProvider = initialParameters.get("provider") || readLocalStorage(providerStorageKey) || "codex";
+dom.aiProvider.value = ["codex", "openai_api"].includes(requestedProvider) ? requestedProvider : "codex";
 let currentRunId = initialParameters.get("run");
 let currentReconstructionId = initialParameters.get("reconstruction");
+let currentTaskProvider = dom.aiProvider.value;
 let eventSource = null;
+let floorplanEventSource = null;
 let reconstructionPreviewUrls = [];
+let floorplanPreviewUrl = null;
 const reconstructionConversationStorageKey = "kitchen-reconstruction-conversation";
 let reconstructionConversationKey = readSessionStorage(reconstructionConversationStorageKey);
 if (!reconstructionConversationKey) {
@@ -58,12 +87,40 @@ if (!reconstructionConversationKey) {
   writeSessionStorage(reconstructionConversationStorageKey, reconstructionConversationKey);
 }
 
+const roomOutlineEditor = createRoomOutlineEditor({
+  input: dom.roomOutline,
+  svg: dom.roomOutlineCanvas,
+  status: dom.roomOutlineStatus,
+  summary: dom.roomOutlineSummary,
+  coordinateOutput: dom.roomOutlineCoordinateOutput,
+  buttons: {
+    rectangle: dom.outlineTemplateRectangle,
+    lShape: dom.outlineTemplateL,
+    uShape: dom.outlineTemplateU,
+    draw: dom.outlineDraw,
+    undo: dom.outlineUndo,
+    close: dom.outlineClose,
+  },
+});
+
 function readSessionStorage(key) {
   try {
     return window.sessionStorage.getItem(key);
   } catch {
     return null;
   }
+}
+
+function readLocalStorage(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function selectedProvider() {
+  return dom.aiProvider.value === "openai_api" ? "openai_api" : "codex";
 }
 
 function writeSessionStorage(key, value) {
@@ -80,6 +137,7 @@ function createLocalId() {
 }
 
 renderProfileProgress();
+installTokenUsageWidget();
 checkService();
 if (currentReconstructionId) restoreReconstruction(currentReconstructionId);
 else if (currentRunId) restoreRun(currentRunId);
@@ -87,6 +145,11 @@ else if (currentRunId) restoreRun(currentRunId);
 dom.form.addEventListener("submit", submitDesign);
 dom.reconstructionForm.addEventListener("submit", submitReconstruction);
 dom.reconstructionImages.addEventListener("change", renderReconstructionImages);
+dom.aiProvider.addEventListener("change", () => {
+  try { window.localStorage.setItem(providerStorageKey, selectedProvider()); } catch { /* Optional preference only. */ }
+});
+dom.floorplanImage.addEventListener("change", renderFloorplanImage);
+dom.recognizeFloorplan.addEventListener("click", recognizeFloorplan);
 dom.designMode.addEventListener("click", () => switchRequestMode("design"));
 dom.reconstructionMode.addEventListener("click", () => switchRequestMode("reconstruction"));
 dom.newDesign.addEventListener("click", () => {
@@ -109,8 +172,13 @@ async function checkService() {
     const response = await fetch("/api/health", { cache: "no-store" });
     if (!response.ok) throw new Error();
     const health = await response.json();
+    const apiOption = dom.aiProvider.querySelector('option[value="openai_api"]');
+    apiOption.disabled = !health.providers?.openai_api?.available;
+    apiOption.textContent = health.providers?.openai_api?.available ? "OpenAI API 模式" : "OpenAI API 模式（未配置 Key）";
+    if (selectedProvider() === "openai_api" && apiOption.disabled) dom.aiProvider.value = "codex";
     dom.serviceStatus.classList.add("online");
-    dom.serviceStatus.innerHTML = `<span></span>生成服务已连接 · ${escapeHtml(health.model)}`;
+    const active = health.providers?.[selectedProvider()];
+    dom.serviceStatus.innerHTML = `<span></span>服务已连接 · ${escapeHtml(active?.model || "AI")}`;
   } catch {
     dom.serviceStatus.classList.remove("online");
     dom.serviceStatus.innerHTML = "<span></span>生成服务未启动";
@@ -129,11 +197,149 @@ function buildRequest() {
   ].join("\n");
 }
 
+function renderFloorplanImage() {
+  if (floorplanPreviewUrl) URL.revokeObjectURL(floorplanPreviewUrl);
+  floorplanPreviewUrl = null;
+  const file = dom.floorplanImage.files[0];
+  dom.floorplanRecognitionResult.classList.add("hidden");
+  if (!file) {
+    dom.floorplanPreview.innerHTML = "<span>尚未选择图片</span>";
+    dom.floorplanUploadLabel.innerHTML = "<strong>选择户型图</strong><small>支持带房间名称、尺寸线或面积标注的 JPG、PNG、WebP</small>";
+    return;
+  }
+  floorplanPreviewUrl = URL.createObjectURL(file);
+  dom.floorplanPreview.innerHTML = `<img src="${floorplanPreviewUrl}" alt="待识别户型图" />`;
+  dom.floorplanUploadLabel.innerHTML = `<strong>${escapeHtml(file.name)}</strong><small>点击可更换图片</small>`;
+}
+
+async function recognizeFloorplan() {
+  const file = dom.floorplanImage.files[0];
+  if (!file) {
+    showToast("请先选择一张户型图。", true);
+    return;
+  }
+  dom.recognizeFloorplan.disabled = true;
+  dom.floorplanRecognitionStatus.classList.remove("error");
+  dom.floorplanRecognitionStatus.textContent = "正在上传户型图…";
+  try {
+    const createResponse = await fetch("/api/floorplans", { method: "POST" });
+    const created = await createResponse.json();
+    if (!createResponse.ok) throw new Error(created.error || "无法创建户型图识别任务");
+    const uploadResponse = await fetch(
+      `/api/floorplans/${encodeURIComponent(created.id)}/image?name=${encodeURIComponent(file.name)}`,
+      { method: "PUT", headers: { "Content-Type": file.type || "application/octet-stream" }, body: file },
+    );
+    const uploaded = await uploadResponse.json();
+    if (!uploadResponse.ok) throw new Error(uploaded.error || "户型图上传失败");
+    dom.floorplanRecognitionStatus.textContent = "正在识别厨房、尺寸和门窗…";
+    const startResponse = await fetch(`/api/floorplans/${encodeURIComponent(created.id)}/start`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ provider: selectedProvider() }),
+    });
+    const task = await startResponse.json();
+    if (!startResponse.ok) throw new Error(task.error || "无法启动户型图识别");
+    followFloorplanTask(task);
+  } catch (error) {
+    dom.recognizeFloorplan.disabled = false;
+    dom.floorplanRecognitionStatus.textContent = `识别失败：${error.message}`;
+    dom.floorplanRecognitionStatus.classList.add("error");
+    showToast(error.message, true);
+  }
+}
+
+function followFloorplanTask(task) {
+  floorplanEventSource?.close();
+  floorplanEventSource = new EventSource(`/api/floorplans/${encodeURIComponent(task.id)}/events`);
+  floorplanEventSource.addEventListener("snapshot", async (event) => {
+    const snapshot = JSON.parse(event.data);
+    dom.floorplanRecognitionStatus.textContent = snapshot.stage || "正在识别户型图";
+    if (snapshot.status === "completed") {
+      floorplanEventSource.close();
+      await applyFloorplanResult(task.id);
+    } else if (snapshot.status === "failed") {
+      floorplanEventSource.close();
+      dom.recognizeFloorplan.disabled = false;
+      dom.floorplanRecognitionStatus.textContent = `识别失败：${snapshot.error || "未知错误"}`;
+      dom.floorplanRecognitionStatus.classList.add("error");
+    }
+  });
+  for (const eventName of ["status", "progress", "system"]) {
+    floorplanEventSource.addEventListener(eventName, (event) => {
+      dom.floorplanRecognitionStatus.textContent = JSON.parse(event.data).message;
+    });
+  }
+  floorplanEventSource.addEventListener("completed", async () => {
+    floorplanEventSource.close();
+    await applyFloorplanResult(task.id);
+  });
+  floorplanEventSource.addEventListener("failed", (event) => {
+    const detail = JSON.parse(event.data);
+    floorplanEventSource.close();
+    dom.recognizeFloorplan.disabled = false;
+    dom.floorplanRecognitionStatus.textContent = `识别失败：${detail.message}`;
+    dom.floorplanRecognitionStatus.classList.add("error");
+  });
+}
+
+async function applyFloorplanResult(taskId) {
+  try {
+    const response = await fetch(`/api/floorplans/${encodeURIComponent(taskId)}`, { cache: "no-store" });
+    const payload = await response.json();
+    if (!response.ok || !payload.result) throw new Error(payload.error || "识别结果不存在");
+    const result = payload.result;
+    dom.floorplanRecognitionResult.classList.remove("hidden");
+    if (result.status !== "recognized") {
+      const warnings = (result.warnings || []).join("；") || "图中信息不足，请手动绘制或补充尺寸。";
+      dom.floorplanRecognitionResult.textContent = warnings;
+      dom.floorplanRecognitionStatus.textContent = "未自动应用：需要人工补充信息";
+      dom.floorplanRecognitionStatus.classList.add("error");
+      return;
+    }
+    roomOutlineEditor.setOutline(result.targetRoom.outline);
+    dom.openings.value = formatRecognizedOpenings(result.openings);
+    const confidence = Math.round((result.targetRoom.confidence || 0) * 100);
+    const assumptions = (result.assumptions || []).length ? `估算项：${result.assumptions.join("；")}` : "未报告额外估算项";
+    const warnings = (result.warnings || []).length ? `；注意：${result.warnings.join("；")}` : "";
+    dom.floorplanRecognitionResult.innerHTML = `<strong>已识别 ${escapeHtml(result.targetRoom.label || "厨房")}</strong> · 置信度 ${confidence}% · 面积 ${formatArea(result.targetRoom.areaM2)}<br>${escapeHtml(assumptions + warnings)}`;
+    dom.floorplanRecognitionStatus.textContent = "识别结果已回填。请对照原图检查墙长和门窗，必要时拖动墙体校正。";
+    dom.floorplanRecognitionStatus.classList.remove("error");
+    dom.roomOutlineCanvas.scrollIntoView({ behavior: "smooth", block: "center" });
+  } catch (error) {
+    dom.floorplanRecognitionStatus.textContent = `无法应用识别结果：${error.message}`;
+    dom.floorplanRecognitionStatus.classList.add("error");
+    showToast(error.message, true);
+  } finally {
+    dom.recognizeFloorplan.disabled = false;
+  }
+}
+
+function formatRecognizedOpenings(openings = []) {
+  if (!openings.length) return "户型图中未识别到厨房直接门窗，请人工确认。";
+  return openings.map((opening) => {
+    const type = opening.type === "window" ? "窗" : "门";
+    const measurements = [
+      Number.isFinite(opening.width) ? `宽 ${opening.width} m` : null,
+      Number.isFinite(opening.offset) ? `距墙段起点 ${opening.offset} m` : null,
+      opening.type === "window" && Number.isFinite(opening.sillHeight) ? `窗台高 ${opening.sillHeight} m` : null,
+    ].filter(Boolean).join("，");
+    const usableText = (value) => typeof value === "string" && /[^?？\s]/.test(value);
+    const connection = usableText(opening.connectsTo) ? `，通向${opening.connectsTo}` : "";
+    const description = usableText(opening.description) ? `：${opening.description}` : "";
+    return `${type}（墙段 ${Number(opening.wallIndex) + 1}${connection}；${measurements || "尺寸待确认"}）${description}`;
+  }).join("；");
+}
+
+function formatArea(value) {
+  return Number.isFinite(value) ? `${Number(value.toFixed(2))} ㎡` : "待确认";
+}
+
 async function submitDesign(event) {
   event.preventDefault();
   const submit = dom.form.querySelector("button[type=submit]");
   submit.disabled = true;
   try {
+    if (!roomOutlineEditor.isComplete()) throw new Error("请先闭合并完成房间边界。");
     validateOutline(dom.roomOutline.value);
     const response = await fetch("/api/runs", {
       method: "POST",
@@ -142,12 +348,13 @@ async function submitDesign(event) {
         name: dom.name.value,
         request: buildRequest(),
         fullRefine: dom.fullRefine.checked,
+        provider: selectedProvider(),
       }),
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || "无法创建生成任务");
     currentRunId = result.id;
-    history.pushState({}, "", `/studio.html?run=${encodeURIComponent(currentRunId)}`);
+    history.pushState({}, "", `/studio.html?run=${encodeURIComponent(currentRunId)}&provider=${encodeURIComponent(selectedProvider())}`);
     startProgress(result);
   } catch (error) {
     showToast(error.message, true);
@@ -202,7 +409,7 @@ async function submitReconstruction(event) {
     if (!createResponse.ok) throw new Error(created.error || "无法创建图片重建任务");
     currentReconstructionId = created.id;
     dom.reconstructionIdLabel.textContent = created.id;
-    history.pushState({}, "", `/studio.html?reconstruction=${encodeURIComponent(created.id)}`);
+    history.pushState({}, "", `/studio.html?reconstruction=${encodeURIComponent(created.id)}&provider=${encodeURIComponent(selectedProvider())}`);
 
     for (const [index, file] of files.entries()) {
       dom.reconstructionProgressStage.textContent = `正在上传图片 ${index + 1} / ${files.length}`;
@@ -227,6 +434,7 @@ async function submitReconstruction(event) {
         name: dom.reconstructionName.value,
         notes: dom.reconstructionNotes.value,
         conversationKey: reconstructionConversationKey,
+        provider: selectedProvider(),
       }),
     });
     const task = await startResponse.json();
@@ -286,6 +494,7 @@ async function restoreReconstruction(reconstructionId) {
 function followReconstructionTask(task) {
   showView("reconstructionProgress");
   currentReconstructionId = task.id;
+  currentTaskProvider = task.provider || currentTaskProvider;
   dom.reconstructionIdLabel.textContent = task.id;
   if (Number.isFinite(task.imageCount)) dom.reconstructionImageCount.textContent = `${task.imageCount} 张图片`;
   updateReconstructionProgress(task);
@@ -337,12 +546,13 @@ async function showReconstructionResult(reconstructionId) {
   const result = await response.json();
   if (!response.ok || !result.sceneUrl) throw new Error(result.error || "重建结果缺少场景 JSON");
   showView("reconstructionResult");
-  dom.reconstructionOpenEditor.href = `/?scene=${encodeURIComponent(result.sceneUrl)}&reconstruction=${encodeURIComponent(reconstructionId)}`;
+  dom.reconstructionOpenEditor.href = `/?scene=${encodeURIComponent(result.sceneUrl)}&reconstruction=${encodeURIComponent(reconstructionId)}&provider=${encodeURIComponent(result.provider || selectedProvider())}`;
   dom.reconstructionDownloadJson.href = result.sceneUrl;
 }
 
 function startProgress(task) {
   showView("progress");
+  currentTaskProvider = task.provider || selectedProvider();
   dom.runIdLabel.textContent = task.id;
   updateProgress(task);
   eventSource?.close();
@@ -415,7 +625,7 @@ function renderPlans(plans) {
           ${strengths ? `<ul class="strength-list">${strengths}</ul>` : ""}
           <div class="plan-actions">
             ${plan.topUrl ? `<a class="studio-button secondary" href="${plan.topUrl}" target="_blank">查看顶视图</a>` : ""}
-            <a class="studio-button primary" href="/?scene=${encodeURIComponent(plan.sceneUrl)}&run=${encodeURIComponent(currentRunId)}&plan=${encodeURIComponent(plan.id)}">选择并编辑</a>
+            <a class="studio-button primary" href="/?scene=${encodeURIComponent(plan.sceneUrl)}&run=${encodeURIComponent(currentRunId)}&plan=${encodeURIComponent(plan.id)}&provider=${encodeURIComponent(currentTaskProvider)}">选择并编辑</a>
           </div>
         </div>
       </article>`;

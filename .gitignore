@@ -6,6 +6,8 @@
 /generation/runs/
 /generation/editor_sessions/
 /generation/reconstructions/
+/generation/floorplan_recognition/
+/generation/token_usage/
 
 # Dataset construction and collected data are not part of the application
 /dataset/

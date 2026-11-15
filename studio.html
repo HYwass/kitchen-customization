@@ -13,7 +13,15 @@
           <span class="studio-brand-mark">K</span>
           <span><strong>Kitchen Studio</strong><small>AI 多方案厨房设计</small></span>
         </a>
-        <div class="service-status" id="service-status"><span></span>正在检查生成服务</div>
+        <div class="studio-service-controls">
+          <label class="provider-control">AI 接入
+            <select id="ai-provider">
+              <option value="codex">Codex 订阅模式</option>
+              <option value="openai_api">OpenAI API 模式</option>
+            </select>
+          </label>
+          <div class="service-status" id="service-status"><span></span>正在检查生成服务</div>
+        </div>
       </header>
 
       <main class="studio-main">
@@ -31,16 +39,49 @@
           <form id="design-form" class="design-form">
             <div class="form-heading">
               <div><span class="step-number">01</span><h2>描述你的厨房</h2></div>
-              <p>边界使用逆时针排列的 XY 坐标，单位为米。</p>
+              <p>在网格上绘制房间轮廓，系统会自动生成 AI 所需的坐标。</p>
             </div>
             <label>
               <span>方案名称</span>
               <input id="design-name" name="name" value="my_kitchen" autocomplete="off" />
             </label>
-            <label>
-              <span>房间边界</span>
-              <textarea id="room-outline" rows="3">[[0,0],[4.8,0],[4.8,3.6],[0,3.6]]</textarea>
-            </label>
+            <section class="room-outline-field" aria-labelledby="room-outline-label">
+              <div class="room-outline-heading">
+                <div><span id="room-outline-label">房间边界</span><small id="room-outline-summary"></small></div>
+                <div class="room-template-actions" aria-label="房间模板">
+                  <button id="outline-template-rectangle" type="button">矩形</button>
+                  <button id="outline-template-l" type="button">L 型</button>
+                  <button id="outline-template-u" type="button">U 型</button>
+                </div>
+              </div>
+              <details class="floorplan-import">
+                <summary>从户型图 AI 识别厨房边界</summary>
+                <div class="floorplan-import-body">
+                  <label class="floorplan-upload">
+                    <input id="floorplan-image" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" />
+                    <span id="floorplan-upload-label"><strong>选择户型图</strong><small>支持带房间名称、尺寸线或面积标注的 JPG、PNG、WebP</small></span>
+                  </label>
+                  <div id="floorplan-preview" class="floorplan-preview"><span>尚未选择图片</span></div>
+                  <button id="recognize-floorplan" class="studio-button secondary" type="button">识别厨房边界</button>
+                  <p id="floorplan-recognition-status" class="floorplan-recognition-status">识别结果会先回填到绘图器，确认无误后再生成方案。</p>
+                  <div id="floorplan-recognition-result" class="floorplan-recognition-result hidden"></div>
+                </div>
+              </details>
+              <div class="room-outline-canvas-wrap">
+                <svg id="room-outline-canvas" class="room-outline-canvas" viewBox="0 0 720 500" role="img" aria-label="正交房间边界绘制区域"></svg>
+                <div class="room-outline-tools" role="toolbar" aria-label="房间绘制工具">
+                  <button id="outline-draw" type="button">重新绘制</button>
+                  <button id="outline-undo" type="button">撤销一点</button>
+                  <button id="outline-close" class="primary" type="button">闭合房间</button>
+                </div>
+              </div>
+              <p id="room-outline-status" class="room-outline-status"></p>
+              <details class="room-outline-data">
+                <summary>查看传给 AI 的边界数据</summary>
+                <code id="room-outline-coordinate-output"></code>
+              </details>
+              <textarea id="room-outline" hidden>[[0,0],[4.8,0],[4.8,3.6],[0,3.6]]</textarea>
+            </section>
             <label>
               <span>门窗与固定条件</span>
               <textarea id="openings" rows="4" placeholder="例如：南墙左侧有一扇 0.9 m 内开门；北墙中部有一扇窗，窗台高 1.15 m。水源位于北墙……"></textarea>

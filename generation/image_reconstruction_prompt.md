@@ -72,6 +72,7 @@
 ## 输出与检查
 
 - 最终响应仅一个完整 scene JSON 对象，满足本次提供的 scene.schema.json（当前版本 1.3.0）；不要 Markdown、解释、报告、置信度、自定义字段或外层 scene 包装。
+- `final_scene.json` 必须以 UTF-8 without BOM 编码保存。在 Windows 上禁止使用 PowerShell `Set-Content`、`Out-File` 或 shell 重定向生成该文件；使用 `apply_patch`，或使用 Node.js `fs.writeFileSync(path, text, "utf8")`。保存后必须以 Node.js `JSON.parse(fs.readFileSync(path, "utf8"))` 直接解析成功，并确认顶层存在 `schemaVersion`、`room` 和 `objects`；不要通过先清除 BOM 的方式掩盖错误编码。
 - 输出前逐项核对：全部图片已查看且跨视角已去重；可见门窗与柱体处理；上下柜范围与角部连接；材质相近；资产、前板、把手与插槽兼容；包围盒、开口净空和台面几何；JSON 字段与类型。
 - 默认只生成初始重建，不调用渲染器、不自动生成三方案、不启动渲染/refine 循环。不因未运行工具声称通过布局验证或视觉核验。
 - 如调用方另开说明整理步骤，另行提供观察依据、尺寸估计、缺失组件的近似和未确认区域；这些信息不写入 scene JSON。信息不足以形成一个可用厨房时应先触发调用方的补图/澄清步骤，而非编造完整场景。

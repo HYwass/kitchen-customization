@@ -503,7 +503,7 @@ function pdfObject(number, bodyChunks) {
   return joinBytes([textBytes(`${number} 0 obj\n`), ...bodyChunks, textBytes("\nendobj\n")]);
 }
 
-function buildPdf(canvases) {
+export function buildPdf(canvases) {
   const objects = [];
   objects[1] = pdfObject(1, [textBytes("<< /Type /Catalog /Pages 2 0 R >>")]);
   const pageNumbers = canvases.map((_, index) => 3 + index * 3);

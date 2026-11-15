@@ -16,8 +16,12 @@ import {
 import { cloneDemoScene } from "./demo-scene.js";
 import { automatedViewDirection } from "./render-view.js";
 import { exportKitchenDrawings } from "./drawing-export.js";
+import { exportKitchenCostBreakdown } from "./cost-export.js";
 import { estimateKitchenPrice } from "./pricing.js";
+import { installTokenUsageWidget } from "./token-usage.js";
+import { installLanguageSwitcher } from "./i18n.js";
 import "./styles.css";
+import "./language-switcher.css";
 
 THREE.Object3D.DEFAULT_UP.set(0, 0, 1);
 
@@ -25,6 +29,9 @@ const renderParameters = new URLSearchParams(window.location.search);
 const generatedRunId = renderParameters.get("run");
 const generatedPlanId = renderParameters.get("plan");
 const reconstructionId = renderParameters.get("reconstruction");
+const aiProvider = renderParameters.get("provider") === "openai_api"
+  ? "openai_api"
+  : readLocalStorage("kitchen-ai-provider") === "openai_api" ? "openai_api" : "codex";
 const standaloneConversationStorageKey = "kitchen-editor-ai-conversation";
 const storedStandaloneConversationKey = readSessionStorage(standaloneConversationStorageKey);
 let editorConversationKey = generatedRunId && generatedPlanId
@@ -35,6 +42,14 @@ let editorConversationKey = generatedRunId && generatedPlanId
 if (!editorConversationKey) {
   editorConversationKey = `standalone:${createLocalId()}`;
   writeSessionStorage(standaloneConversationStorageKey, editorConversationKey);
+}
+
+function readLocalStorage(key) {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
 }
 const automatedRenderView = renderParameters.get("render") === "1"
   ? renderParameters.get("view")
@@ -73,6 +88,7 @@ const dom = {
   loadInput: document.querySelector("#load-input"),
   saveButton: document.querySelector("#save-button"),
   drawingButton: document.querySelector("#drawing-button"),
+  costButton: document.querySelector("#cost-button"),
   priceWidget: document.querySelector("#price-widget"),
   priceButton: document.querySelector("#price-button"),
   priceTotal: document.querySelector("#price-total"),
@@ -110,6 +126,9 @@ let worktopRebuildQueued = false;
 let lastCollisionToastTime = 0;
 let refinementOriginalState = null;
 let refinementEventSource = null;
+
+installLanguageSwitcher();
+installTokenUsageWidget();
 
 const COLLISION_EPSILON = 0.0001;
 const COLLISION_PATH_STEP = 0.02;
@@ -733,6 +752,7 @@ function setupEvents() {
   dom.resetButton.addEventListener("click", resetScene);
   dom.saveButton.addEventListener("click", saveSceneJson);
   dom.drawingButton.addEventListener("click", exportCurrentDrawings);
+  dom.costButton.addEventListener("click", exportCurrentCostBreakdown);
   dom.priceButton.addEventListener("click", () => {
     const expanded = dom.priceButton.getAttribute("aria-expanded") === "true";
     dom.priceButton.setAttribute("aria-expanded", String(!expanded));
@@ -1498,12 +1518,7 @@ function formatEstimatedPrice(value) {
 }
 
 function updatePriceSummary() {
-  const estimate = estimateKitchenPrice(sceneState, {
-    cabinets: CABINET_ASSETS,
-    fronts: FRONT_ASSETS,
-    appliances: APPLIANCE_ASSETS,
-    furniture: FURNITURE_ASSETS,
-  }, proceduralFinishMetrics());
+  const estimate = currentPriceEstimate();
   const format = formatEstimatedPrice;
   dom.priceTotal.textContent = format(estimate.total);
   dom.pricePopoverTotal.textContent = format(estimate.total);
@@ -1522,6 +1537,15 @@ function updatePriceSummary() {
     </div>
   `;
   dom.priceDisclaimer.textContent = estimate.disclaimer;
+}
+
+function currentPriceEstimate() {
+  return estimateKitchenPrice(sceneState, {
+    cabinets: CABINET_ASSETS,
+    fronts: FRONT_ASSETS,
+    appliances: APPLIANCE_ASSETS,
+    furniture: FURNITURE_ASSETS,
+  }, proceduralFinishMetrics());
 }
 
 function rebuildProceduralFinishes() {
@@ -2804,6 +2828,18 @@ function exportCurrentDrawings() {
   }
 }
 
+function exportCurrentCostBreakdown() {
+  try {
+    syncSceneTransforms();
+    const estimate = currentPriceEstimate();
+    const result = exportKitchenCostBreakdown(sceneState, estimate);
+    const warningText = result.warningCount ? `，${result.warningCount} 项未配置价格` : "";
+    showToast(`已导出 ${result.pageCount} 页成本清单，共 ${result.lineItemCount} 项${warningText}`);
+  } catch (error) {
+    showToast(`成本清单导出失败：${error.message}`, true);
+  }
+}
+
 function syncSceneTransforms() {
   for (const item of sceneState.objects) {
     const root = objectMap.get(item.id);
@@ -2846,6 +2882,7 @@ async function submitAiRefinement(event) {
         instruction,
         conversationKey: editorConversationKey,
         planName: sceneState.name || generatedPlanId || "厨房方案",
+        provider: aiProvider,
       }),
     });
     const task = await response.json();
